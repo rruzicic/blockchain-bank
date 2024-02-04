@@ -1,0 +1,96 @@
+CA
+    Org1:
+    - 1000
+    - 1100
+
+    Org2:
+    - 2000
+    - 2100
+
+    Org3:
+    - 3000
+    - 3100
+
+    Org4:
+    - 4000
+    - 4100
+
+    Orderer1:
+     - 5000
+     - 5100
+    
+    Orderer2:
+     - 6000
+     - 6100
+
+Peers:
+    Org1:
+        Peer1:
+         - 1001
+         - 1011
+         CouchDB: 1100
+        Peer2:
+         - 1002
+         - 1012
+         CouchDB: 1200
+        Peer3:
+         - 1003
+         - 1013
+         CouchDB: 1300
+        Peer4:
+         - 1004
+         - 1014
+         CouchDB: 1400
+
+    Org2:
+        Peer1:
+         - 2001
+         - 2011
+         CouchDB: 2100
+        Peer2:
+         - 2002
+         - 2012
+         CouchDB: 2200
+        Peer3:
+         - 2003
+         - 2013
+         CouchDB: 2300
+        Peer4:
+         - 2004
+         - 2014
+         CouchDB: 2400
+
+    Org3:
+        Peer1:
+         - 3001
+         - 3011
+         CouchDB: 3100
+        Peer2:
+         - 3002
+         - 3012
+         CouchDB: 3200
+        Peer3:
+         - 3003
+         - 3013
+         CouchDB: 3300
+        Peer4:
+         - 3004
+         - 3014
+         CouchDB: 3400
+    Org4:
+        Peer1:
+         - 4001
+         - 4011
+         CouchDB: 4100
+        Peer2:
+         - 4002
+         - 4012
+         CouchDB: 4200
+        Peer3:
+         - 4003
+         - 4013
+         CouchDB: 4300
+        Peer4:
+         - 4004
+         - 4014
+         CouchDB: 4400
