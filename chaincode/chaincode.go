@@ -6,7 +6,6 @@ import (
   "github.com/hyperledger/fabric-contract-api-go/contractapi"
 )
 
-// Asset describes basic details of what makes up a simple asset
 type Bank struct {
     Id             string `json:"id"`
 	Name 		   string `json:"name"`
@@ -111,46 +110,82 @@ func (s *SmartContract) InitLedger(ctx contractapi.TransactionContextInterface) 
   return nil
 }
 
-// CreateAsset issues a new asset to the world state with given details.
-func (s *SmartContract) CreateAsset(ctx contractapi.TransactionContextInterface, id string, color string, size int, owner string, appraisedValue int) error {
+func (s *SmartContract) GetAllBanks(ctx contractapi.TransactionContextInterface) ([]*Bank, error) {
+	//range query works in lexical order
+	resultsIterator, err := ctx.GetStub().GetStateByRange("bank1", "bank999")
+	if err != nil {
+		return nil, err
+	}
+	defer resultsIterator.Close()
+
+	var banks []*Bank
+	for resultsIterator.HasNext() {
+		queryResponse, err := resultsIterator.Next()
+		if err != nil {
+			return nil, err
+		}
+
+		var bank Bank
+		err = json.Unmarshal(queryResponse.Value, &bank)
+		if err != nil {
+			return nil, err
+		}
+		banks = append(banks, &bank)
+	}
+
+	return banks, nil
+}
+
+// AssetExists returns true when asset with given ID exists in world state
+func (s *SmartContract) AssetExists(ctx contractapi.TransactionContextInterface, id string) (bool, error) {
+    assetJSON, err := ctx.GetStub().GetState(id)
+    if err != nil {
+      return false, fmt.Errorf("failed to read from world state: %v", err)
+    }
+
+    return assetJSON != nil, nil
+  }
+
+// CreateClient issues a new client to the world state with given details.
+func (s *SmartContract) CreateClient(ctx contractapi.TransactionContextInterface, id string, firstName string, LastName string, email string) error {
     exists, err := s.AssetExists(ctx, id)
     if err != nil {
       return err
     }
     if exists {
-      return fmt.Errorf("the asset %s already exists", id)
+      return fmt.Errorf("the client %s already exists", id)
     }
 
-    asset := Asset{
-      ID:             id,
-      Color:          color,
-      Size:           size,
-      Owner:          owner,
-      AppraisedValue: appraisedValue,
+    client := Client{
+      Id:             id,
+      FirstName:      firstName,
+      LastName:       size,
+      Email:          email,
+      Accounts: 	  {},
     }
-    assetJSON, err := json.Marshal(asset)
+    clientJSON, err := json.Marshal(client)
     if err != nil {
       return err
     }
 
-    return ctx.GetStub().PutState(id, assetJSON)
+    return ctx.GetStub().PutState(id, clientJSON)
   }
 
-// ReadAsset returns the asset stored in the world state with given id.
-func (s *SmartContract) ReadAsset(ctx contractapi.TransactionContextInterface, id string) (*Asset, error) {
-    assetJSON, err := ctx.GetStub().GetState(id)
+// ReadClient returns the client stored in the world state with given id.
+func (s *SmartContract) ReadClient(ctx contractapi.TransactionContextInterface, id string) (*Client, error) {
+    clientJSON, err := ctx.GetStub().GetState(id)
     if err != nil {
       return nil, fmt.Errorf("failed to read from world state: %v", err)
     }
-    if assetJSON == nil {
-      return nil, fmt.Errorf("the asset %s does not exist", id)
+    if clientJSON == nil {
+      return nil, fmt.Errorf("the client %s does not exist", id)
     }
 
-    var asset Asset
-    err = json.Unmarshal(assetJSON, &asset)
+    var client Client
+    err = json.Unmarshal(clientJSON, &client)
     if err != nil {
       return nil, err
     }
 
-    return &asset, nil
+    return &client, nil
   }
