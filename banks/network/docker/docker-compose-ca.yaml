@@ -95,7 +95,7 @@ services:
       - "5100:5100"
     command: sh -c 'fabric-ca-server start -b admin:adminpw -d'
     volumes:
-      - ../organizations/fabric-ca/ordererOrg:/etc/hyperledger/fabric-ca-server
+      - ../organizations/fabric-ca/orderer1Org:/etc/hyperledger/fabric-ca-server
     container_name: ca_orderer1
     networks:
       - fabric_net
@@ -113,7 +113,7 @@ services:
       - "6100:6100"
     command: sh -c 'fabric-ca-server start -b admin:adminpw -d'
     volumes:
-      - ../organizations/fabric-ca/ordererOrg:/etc/hyperledger/fabric-ca-server
+      - ../organizations/fabric-ca/orderer2Org:/etc/hyperledger/fabric-ca-server
     container_name: ca_orderer2
     networks:
       - fabric_net

@@ -3,11 +3,15 @@
 CA_IMAGETAG="latest"
 COMPOSE_FILE_CA=docker/docker-compose-ca.yaml
 # use this as the default docker-compose yaml definition
-COMPOSE_FILE_BASE=docker/docker-compose-test-net.yaml
+COMPOSE_FILE_BASE=docker/docker-compose-fabric-net.yaml
 # docker-compose.yaml file if you are using couchdb
 COMPOSE_FILE_COUCH=docker/docker-compose-couch.yaml
 
-CRYPTO="cryptogen"
+CRYPTO="Certificate Authorities"
+
+export PATH=${PWD}/bin:$PATH
+export FABRIC_CFG_PATH=${PWD}/configtx
+export VERBOSE=false
 
 . utils.sh
 
@@ -122,11 +126,11 @@ function createOrgs() {
 
     infoln "Creating Orderer 1 Org Identities"
 
-    createOrderer
+    createOrderer orderer1 5000
 
-    # infoln "Creating Orderer 2 Org Identities"
+    infoln "Creating Orderer 2 Org Identities"
 
-    # createOrderer2
+    createOrderer orderer2 6000
 
   fi
 
@@ -167,7 +171,7 @@ function networkUp() {
   COMPOSE_FILES="${COMPOSE_FILES} -f ${COMPOSE_FILE_COUCH}"
   # fi
 
-  IMAGE_TAG=$IMAGETAG docker-compose ${COMPOSE_FILES} up -d 2>&1
+  IMAGE_TAG=$IMAGETAG docker compose ${COMPOSE_FILES} up -d 2>&1
 
   docker ps -a
   if [ $? -ne 0 ]; then

@@ -2,7 +2,7 @@
 
 function createOrganization() {
   ORG_NAME=$1
-  CA_PORT=$2
+  ORG_PORT=$2
   PEER_COUNT=$3
   ORG_HOME_PATH="${PWD}/organizations/peerOrganizations/${ORG_NAME}.example.com"
 
@@ -92,66 +92,70 @@ function createOrganization() {
 }
 
 function createOrderer() {
-  infoln "Enrolling the CA admin"
-  mkdir -p organizations/ordererOrganizations/example.com
+  ORDERER_NAME=$1
+  ORDERER_PORT=$2
+  ORDERER_HOME_PATH="${PWD}/organizations/ordererOrganizations/${ORDERER_NAME}.example.com"
 
-  export FABRIC_CA_CLIENT_HOME=${PWD}/organizations/ordererOrganizations/example.com
+  infoln "Enrolling the CA admin"
+  mkdir -p organizations/ordererOrganizations/${ORDERER_NAME}.example.com/
+
+  export FABRIC_CA_CLIENT_HOME=${ORDERER_HOME_PATH}
 
   set -x
-  fabric-ca-client enroll -u https://admin:adminpw@localhost:5000 --caname ca-orderer --tls.certfiles ${PWD}/organizations/fabric-ca/ordererOrg/tls-cert.pem
+  fabric-ca-client enroll -u https://admin:adminpw@localhost:${ORDERER_PORT} --caname ca-orderer --tls.certfiles ${PWD}/organizations/fabric-ca/ordererOrg/tls-cert.pem
   { set +x; } 2>/dev/null
 
   echo 'NodeOUs:
   Enable: true
   ClientOUIdentifier:
-    Certificate: cacerts/localhost-5000-ca-orderer.pem
+    Certificate: cacerts/localhost-'${ORDERER_PORT}'-ca-orderer.pem
     OrganizationalUnitIdentifier: client
   PeerOUIdentifier:
-    Certificate: cacerts/localhost-5000-ca-orderer.pem
+    Certificate: cacerts/localhost-'${ORDERER_PORT}'-ca-orderer.pem
     OrganizationalUnitIdentifier: peer
   AdminOUIdentifier:
-    Certificate: cacerts/localhost-5000-ca-orderer.pem
+    Certificate: cacerts/localhost-'${ORDERER_PORT}'-ca-orderer.pem
     OrganizationalUnitIdentifier: admin
   OrdererOUIdentifier:
-    Certificate: cacerts/localhost-5000-ca-orderer.pem
-    OrganizationalUnitIdentifier: orderer' >${PWD}/organizations/ordererOrganizations/example.com/msp/config.yaml
+    Certificate: cacerts/localhost-'${ORDERER_PORT}'-ca-orderer.pem
+    OrganizationalUnitIdentifier: orderer' > ${ORDERER_HOME_PATH}/msp/config.yaml
 
   infoln "Registering orderer"
   set -x
-  fabric-ca-client register --caname ca-orderer --id.name orderer --id.secret ordererpw --id.type orderer --tls.certfiles ${PWD}/organizations/fabric-ca/ordererOrg/tls-cert.pem
+  fabric-ca-client register --caname ca-orderer --id.name ${ORDERER_NAME} --id.secret ${ORDERER_NAME}pw --id.type orderer --tls.certfiles ${PWD}/organizations/fabric-ca/ordererOrg/tls-cert.pem
   { set +x; } 2>/dev/null
 
   infoln "Registering the orderer admin"
   set -x
-  fabric-ca-client register --caname ca-orderer --id.name ordererAdmin --id.secret ordererAdminpw --id.type admin --tls.certfiles ${PWD}/organizations/fabric-ca/ordererOrg/tls-cert.pem
+  fabric-ca-client register --caname ca-orderer --id.name ${ORDERER_NAME}Admin --id.secret ${ORDERER_NAME}Adminpw --id.type admin --tls.certfiles ${PWD}/organizations/fabric-ca/ordererOrg/tls-cert.pem
   { set +x; } 2>/dev/null
 
   infoln "Generating the orderer msp"
   set -x
-  fabric-ca-client enroll -u https://orderer:ordererpw@localhost:5000 --caname ca-orderer -M ${PWD}/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp --csr.hosts orderer.example.com --csr.hosts localhost --tls.certfiles ${PWD}/organizations/fabric-ca/ordererOrg/tls-cert.pem
+  fabric-ca-client enroll -u https://${ORDERER_NAME}:${ORDERER_NAME}pw@localhost:${ORDERER_PORT} --caname ca-orderer -M ${ORDERER_HOME_PATH}/orderers/${ORDERER_NAME}.example.com/msp --csr.hosts ${ORDERER_NAME}.example.com --csr.hosts localhost --tls.certfiles ${PWD}/organizations/fabric-ca/ordererOrg/tls-cert.pem
   { set +x; } 2>/dev/null
 
-  cp ${PWD}/organizations/ordererOrganizations/example.com/msp/config.yaml ${PWD}/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/config.yaml
+  cp ${ORDERER_HOME_PATH}/msp/config.yaml ${ORDERER_HOME_PATH}/orderers/${ORDERER_NAME}.example.com/msp/config.yaml
 
   infoln "Generating the orderer-tls certificates"
   set -x
-  fabric-ca-client enroll -u https://orderer:ordererpw@localhost:5000 --caname ca-orderer -M ${PWD}/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/tls --enrollment.profile tls --csr.hosts orderer.example.com --csr.hosts localhost --tls.certfiles ${PWD}/organizations/fabric-ca/ordererOrg/tls-cert.pem
+  fabric-ca-client enroll -u https://${ORDERER_NAME}:${ORDERER_NAME}pw@localhost:${ORDERER_PORT} --caname ca-orderer -M ${ORDERER_HOME_PATH}/orderers/${ORDERER_NAME}.example.com/tls --enrollment.profile tls --csr.hosts ${ORDERER_NAME}.example.com --csr.hosts localhost --tls.certfiles ${PWD}/organizations/fabric-ca/ordererOrg/tls-cert.pem
   { set +x; } 2>/dev/null
 
-  cp ${PWD}/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/tls/tlscacerts/* ${PWD}/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/tls/ca.crt
-  cp ${PWD}/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/tls/signcerts/* ${PWD}/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/tls/server.crt
-  cp ${PWD}/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/tls/keystore/* ${PWD}/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/tls/server.key
+  cp ${ORDERER_HOME_PATH}/orderers/${ORDERER_NAME}.example.com/tls/tlscacerts/* ${ORDERER_HOME_PATH}/orderers/${ORDERER_NAME}.example.com/tls/ca.crt
+  cp ${ORDERER_HOME_PATH}/orderers/${ORDERER_NAME}.example.com/tls/signcerts/* ${ORDERER_HOME_PATH}/orderers/${ORDERER_NAME}.example.com/tls/server.crt
+  cp ${ORDERER_HOME_PATH}/orderers/${ORDERER_NAME}.example.com/tls/keystore/* ${ORDERER_HOME_PATH}/orderers/${ORDERER_NAME}.example.com/tls/server.key
 
-  mkdir -p ${PWD}/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts
-  cp ${PWD}/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/tls/tlscacerts/* ${PWD}/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem
+  mkdir -p ${ORDERER_HOME_PATH}/orderers/${ORDERER_NAME}.example.com/msp/tlscacerts
+  cp ${ORDERER_HOME_PATH}/orderers/${ORDERER_NAME}.example.com/tls/tlscacerts/* ${ORDERER_HOME_PATH}/orderers/${ORDERER_NAME}.example.com/msp/tlscacerts/tlsca.example.com-cert.pem
 
-  mkdir -p ${PWD}/organizations/ordererOrganizations/example.com/msp/tlscacerts
-  cp ${PWD}/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/tls/tlscacerts/* ${PWD}/organizations/ordererOrganizations/example.com/msp/tlscacerts/tlsca.example.com-cert.pem
+  mkdir -p ${ORDERER_HOME_PATH}/msp/tlscacerts
+  cp ${ORDERER_HOME_PATH}/orderers/${ORDERER_NAME}.example.com/tls/tlscacerts/* ${ORDERER_HOME_PATH}/msp/tlscacerts/tlsca.example.com-cert.pem
 
   infoln "Generating the admin msp"
   set -x
-  fabric-ca-client enroll -u https://ordererAdmin:ordererAdminpw@localhost:5000 --caname ca-orderer -M ${PWD}/organizations/ordererOrganizations/example.com/users/Admin@example.com/msp --tls.certfiles ${PWD}/organizations/fabric-ca/ordererOrg/tls-cert.pem
+  fabric-ca-client enroll -u https://${ORDERER_NAME}Admin:${ORDERER_NAME}Adminpw@localhost:${ORDERER_PORT} --caname ca-orderer -M ${ORDERER_HOME_PATH}/users/Admin@${ORDERER_NAME}.example.com/msp --tls.certfiles ${PWD}/organizations/fabric-ca/ordererOrg/tls-cert.pem
   { set +x; } 2>/dev/null
 
-  cp ${PWD}/organizations/ordererOrganizations/example.com/msp/config.yaml ${PWD}/organizations/ordererOrganizations/example.com/users/Admin@example.com/msp/config.yaml
+  cp ${ORDERER_HOME_PATH}/msp/config.yaml ${ORDERER_HOME_PATH}/users/Admin@${ORDERER_NAME}.example.com/msp/config.yaml
 }
