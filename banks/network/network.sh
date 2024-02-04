@@ -1,3 +1,5 @@
+#!/bin/bash
+
 CA_IMAGETAG="latest"
 COMPOSE_FILE_CA=docker/docker-compose-ca.yaml
 # use this as the default docker-compose yaml definition
@@ -5,78 +7,84 @@ COMPOSE_FILE_BASE=docker/docker-compose-test-net.yaml
 # docker-compose.yaml file if you are using couchdb
 COMPOSE_FILE_COUCH=docker/docker-compose-couch.yaml
 
+CRYPTO="cryptogen"
+
+. utils.sh
+
 
 function createOrgs() {
   if [ -d "organizations/peerOrganizations" ]; then
     rm -Rf organizations/peerOrganizations && rm -Rf organizations/ordererOrganizations
   fi
 
-  # Create crypto material using cryptogen
-  which cryptogen
-  if [ "$?" -ne 0 ]; then
-    fatalln "cryptogen tool not found. exiting"
-  fi
+  if [ "$CRYPTO" == "cryptogen" ]; then
+    # Create crypto material using cryptogen
+    which cryptogen
+    if [ "$?" -ne 0 ]; then
+      fatalln "cryptogen tool not found. exiting"
+    fi
 
-  infoln "Generating certificates using cryptogen tool"
+    infoln "Generating certificates using cryptogen tool"
 
-  infoln "Creating Org1 Identities"
+    infoln "Creating Org1 Identities"
 
-  set -x
-  cryptogen generate --config=./organizations/cryptogen/crypto-config-org1.yaml --output="organizations"
-  res=$?
-  { set +x; } 2>/dev/null
-  if [ $res -ne 0 ]; then
-    fatalln "Failed to generate certificates..."
-  fi
+    set -x
+    cryptogen generate --config=./organizations/cryptogen/crypto-config-org1.yaml --output="organizations"
+    res=$?
+    { set +x; } 2>/dev/null
+    if [ $res -ne 0 ]; then
+      fatalln "Failed to generate certificates..."
+    fi
 
-  infoln "Creating Org2 Identities"
+    infoln "Creating Org2 Identities"
 
-  set -x
-  cryptogen generate --config=./organizations/cryptogen/crypto-config-org2.yaml --output="organizations"
-  res=$?
-  { set +x; } 2>/dev/null
-  if [ $res -ne 0 ]; then
-    fatalln "Failed to generate certificates..."
-  fi
+    set -x
+    cryptogen generate --config=./organizations/cryptogen/crypto-config-org2.yaml --output="organizations"
+    res=$?
+    { set +x; } 2>/dev/null
+    if [ $res -ne 0 ]; then
+      fatalln "Failed to generate certificates..."
+    fi
 
-  infoln "Creating Org3 Identities"
+    infoln "Creating Org3 Identities"
 
-  set -x
-  cryptogen generate --config=./organizations/cryptogen/crypto-config-org3.yaml --output="organizations"
-  res=$?
-  { set +x; } 2>/dev/null
-  if [ $res -ne 0 ]; then
-    fatalln "Failed to generate certificates..."
-  fi
+    set -x
+    cryptogen generate --config=./organizations/cryptogen/crypto-config-org3.yaml --output="organizations"
+    res=$?
+    { set +x; } 2>/dev/null
+    if [ $res -ne 0 ]; then
+      fatalln "Failed to generate certificates..."
+    fi
 
-  infoln "Creating Org4 Identities"
+    infoln "Creating Org4 Identities"
 
-  set -x
-  cryptogen generate --config=./organizations/cryptogen/crypto-config-org4.yaml --output="organizations"
-  res=$?
-  { set +x; } 2>/dev/null
-  if [ $res -ne 0 ]; then
-    fatalln "Failed to generate certificates..."
-  fi
+    set -x
+    cryptogen generate --config=./organizations/cryptogen/crypto-config-org4.yaml --output="organizations"
+    res=$?
+    { set +x; } 2>/dev/null
+    if [ $res -ne 0 ]; then
+      fatalln "Failed to generate certificates..."
+    fi
 
-  infoln "Creating Orderer 1 Org Identities"
+    infoln "Creating Orderer 1 Org Identities"
 
-  set -x
-  cryptogen generate --config=./organizations/cryptogen/crypto-config-orderer1.yaml --output="organizations"
-  res=$?
-  { set +x; } 2>/dev/null
-  if [ $res -ne 0 ]; then
-    fatalln "Failed to generate certificates..."
-  fi
+    set -x
+    cryptogen generate --config=./organizations/cryptogen/crypto-config-orderer1.yaml --output="organizations"
+    res=$?
+    { set +x; } 2>/dev/null
+    if [ $res -ne 0 ]; then
+      fatalln "Failed to generate certificates..."
+    fi
 
-  infoln "Creating Orderer 2 Org Identities"
+    infoln "Creating Orderer 2 Org Identities"
 
-  set -x
-  cryptogen generate --config=./organizations/cryptogen/crypto-config-orderer2.yaml --output="organizations"
-  res=$?
-  { set +x; } 2>/dev/null
-  if [ $res -ne 0 ]; then
-    fatalln "Failed to generate certificates..."
+    set -x
+    cryptogen generate --config=./organizations/cryptogen/crypto-config-orderer2.yaml --output="organizations"
+    res=$?
+    { set +x; } 2>/dev/null
+    if [ $res -ne 0 ]; then
+      fatalln "Failed to generate certificates..."
+    fi
   fi
 
   # Create crypto material using Fabric CA
@@ -98,27 +106,27 @@ function createOrgs() {
 
     infoln "Creating Org1 Identities"
 
-    createOrg1
+    createOrganization org1 1000 4 
 
     infoln "Creating Org2 Identities"
 
-    createOrg2
+    createOrganization org2 2000 4 
 
     infoln "Creating Org3 Identities"
 
-    createOrg2
+    createOrganization org3 3000 4 
 
     infoln "Creating Org4 Identities"
 
-    createOrg2
+    createOrganization org4 4000 4 
 
     infoln "Creating Orderer 1 Org Identities"
 
-    createOrderer1
+    createOrderer
 
-    infoln "Creating Orderer 2 Org Identities"
+    # infoln "Creating Orderer 2 Org Identities"
 
-    createOrderer2
+    # createOrderer2
 
   fi
 
@@ -137,7 +145,7 @@ function createConsortium() {
   # Note: For some unknown reason (at least for now) the block file can't be
   # named orderer.genesis.block or the orderer will fail to launch!
   set -x
-  configtxgen -profile TwoOrgsOrdererGenesis -channelID system-channel -outputBlock ./system-genesis-block/genesis.block
+  configtxgen -profile FourOrgsOrdererGenesis -channelID system-channel -outputBlock ./system-genesis-block/genesis.block
   res=$?
   { set +x; } 2>/dev/null
   if [ $res -ne 0 ]; then
@@ -195,3 +203,5 @@ function deployCC() {
     fatalln "Deploying chaincode failed"
   fi
 }
+
+createOrgs
