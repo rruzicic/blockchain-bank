@@ -42,6 +42,7 @@ func (s *SmartContract) InitLedger(ctx contractapi.TransactionContextInterface) 
 		{Id:"bank1", Name:"Cacanska banka", HQ:"Cacak", FoundingYear:1408, PIB:"1408", Clients:{}},
 		{Id:"bank2", Name:"Kosovska banka", HQ:"Ljubic", FoundingYear:1389, PIB:"1389", Clients:{}},
 		{Id:"bank3", Name:"Banka svetog trojstva", HQ:"Cacak", FoundingYear:333, PIB:"3333", Clients:{}},
+		{Id:"bank4", Name:"Banka banka", HQ:"Beograd", FoundingYear:2024, PIB:"2024", Clients:{}},
 	}
 
 	clients := []Client {
@@ -49,6 +50,14 @@ func (s *SmartContract) InitLedger(ctx contractapi.TransactionContextInterface) 
 		{Id:"client2", FirstName:"Raca", LastName:"Braca", Email:"racabraca@gmail.com", Accounts:{}},
 		{Id:"client3", FirstName:"Milos", LastName:"Obilic", Email:"losmiKralj1389@gmail.com", Accounts:{}},
 		{Id:"client4", FirstName:"Bosko", LastName:"Jugovic", Email:"jugovicaMother@gmail.com", Accounts:{}},
+		{Id:"client5", FirstName:"Client5", LastName:"Client5", Email:"Client5@gmail.com", Accounts:{}},
+		{Id:"client6", FirstName:"Client6", LastName:"Client6", Email:"Client6@gmail.com", Accounts:{}},
+		{Id:"client7", FirstName:"Client7", LastName:"Client7", Email:"Client7@gmail.com", Accounts:{}},
+		{Id:"client8", FirstName:"Client8", LastName:"Client8", Email:"Client8@gmail.com", Accounts:{}},
+		{Id:"client9", FirstName:"Client9", LastName:"Client9", Email:"Client9@gmail.com", Accounts:{}},
+		{Id:"client10", FirstName:"Client10", LastName:"Client10", Email:"Client10@gmail.com", Accounts:{}},
+		{Id:"client11", FirstName:"Client11", LastName:"Client11", Email:"Client11@gmail.com", Accounts:{}},
+		{Id:"client12", FirstName:"Client12", LastName:"Client12", Email:"Client12@gmail.com", Accounts:{}},
 	}
 
 	accounts := []Account {
@@ -60,15 +69,33 @@ func (s *SmartContract) InitLedger(ctx contractapi.TransactionContextInterface) 
 		{Id:"account2Rsd", Ballance:1000.0, Currency:"RSD"},
 		{Id:"account3Rsd", Ballance:1000.0, Currency:"RSD"},
 		{Id:"account4Rsd", Ballance:1000.0, Currency:"RSD"},
+		{Id:"account5Rsd", Ballance:1000.0, Currency:"RSD"},
+		{Id:"account6Rsd", Ballance:1000.0, Currency:"RSD"},
+		{Id:"account7Rsd", Ballance:1000.0, Currency:"RSD"},
+		{Id:"account8Rsd", Ballance:1000.0, Currency:"RSD"},
+		{Id:"account9Rsd", Ballance:1000.0, Currency:"RSD"},
+		{Id:"account10Rsd", Ballance:1000.0, Currency:"RSD"},
+		{Id:"account11Rsd", Ballance:1000.0, Currency:"RSD"},
+		{Id:"account12Rsd", Ballance:1000.0, Currency:"RSD"},
 	}
 
 	clients[0].Accounts = append(clients[0].Accounts, "account1Eur", "account1Rsd")
 	clients[1].Accounts = append(clients[1].Accounts, "account2Eur", "account2Rsd")
 	clients[2].Accounts = append(clients[2].Accounts, "account3Eur", "account3Rsd")
 	clients[3].Accounts = append(clients[3].Accounts, "account4Eur", "account4Rsd")
+	clients[4].Accounts = append(clients[4].Accounts, "account5Rsd")
+	clients[5].Accounts = append(clients[5].Accounts, "account6Rsd")
+	clients[6].Accounts = append(clients[6].Accounts, "account7Rsd")
+	clients[7].Accounts = append(clients[7].Accounts, "account8Rsd")
+	clients[8].Accounts = append(clients[8].Accounts, "account9Rsd")
+	clients[9].Accounts = append(clients[9].Accounts, "account10Rsd")
+	clients[10].Accounts = append(clients[10].Accounts, "account11Rsd")
+	clients[11].Accounts = append(clients[11].Accounts, "account12Rsd")
 
-	banks[0].Clients = append(banks[0].Clients, "client1", "client2")
-	banks[1].Clients = append(banks[1].Clients, "client3", "client4")
+	banks[0].Clients = append(banks[0].Clients, "client1", "client2", "client5")
+	banks[1].Clients = append(banks[1].Clients, "client3", "client4", "client6")
+	banks[2].Clients = append(banks[2].Clients, "client7", "client8", "client9")
+	banks[3].Clients = append(banks[3].Clients, "client10", "client11", "client12")
 
 	for _, bank := range banks {
 		bankJSON, err := json.Marshal(bank)
