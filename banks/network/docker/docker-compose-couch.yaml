@@ -2,65 +2,250 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 #
-# ovde treba srediti sve portove posto se ponavljaju za servise i to nece raditi
 
-version: '2.1'
+version: "2.1"
 
 networks:
-  test:
-    name: fabric_test
+  fabric_net:
+    name: fabric_net
 
 services:
   couchdb0:
     container_name: couchdb0
-    image: couchdb:3.1.1
-    # Populate the COUCHDB_USER and COUCHDB_PASSWORD to set an admin user and password
-    # for CouchDB.  This will prevent CouchDB from operating in an "Admin Party" mode.
-    environment:
-      - COUCHDB_USER=admin
-      - COUCHDB_PASSWORD=adminpw
-    # Comment/Uncomment the port mapping if you want to hide/expose the CouchDB service,
-    # for example map it to utilize Fauxton User Interface in dev environments.
+    extends:
+      file: docker-service-extend.yaml
+      service: couchdb-extend
     ports:
-      - "5984:5984"
-    networks:
-      - test
+      - "1100:1100"
 
   peer0.org1.example.com:
     environment:
       - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
-      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb0:5984
-      # The CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME and CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD
-      # provide the credentials for ledger to connect to CouchDB.  The username and password must
-      # match the username and password set for the associated CouchDB.
-      - CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME=admin
-      - CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD=adminpw
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb0:1100
     depends_on:
       - couchdb0
 
-  couchdb1:
-    container_name: couchdb1
-    image: couchdb:3.1.1
-    # Populate the COUCHDB_USER and COUCHDB_PASSWORD to set an admin user and password
-    # for CouchDB.  This will prevent CouchDB from operating in an "Admin Party" mode.
-    environment:
-      - COUCHDB_USER=admin
-      - COUCHDB_PASSWORD=adminpw
-    # Comment/Uncomment the port mapping if you want to hide/expose the CouchDB service,
-    # for example map it to utilize Fauxton User Interface in dev environments.
+  # couchdb1:
+  #   container_name: couchdb1
+  #   extends:
+  #     file: docker-service-extend.yaml
+  #     service: couchdb-extend
+  #   ports:
+  #     - "1200:1200"
+
+  # peer1.org1.example.com:
+  #   environment:
+  #     - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
+  #     - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb1:1200
+  #   depends_on:
+  #     - couchdb1
+
+  # couchdb2:
+  #   container_name: couchdb2
+  #   extends:
+  #     file: docker-service-extend.yaml
+  #     service: couchdb-extend
+  #   ports:
+  #     - "1300:1300"
+
+  # peer2.org1.example.com:
+  #   environment:
+  #     - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
+  #     - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb2:1300
+  #   depends_on:
+  #     - couchdb2
+
+  # couchdb3:
+  #   container_name: couchdb3
+  #   extends:
+  #     file: docker-service-extend.yaml
+  #     service: couchdb-extend
+  #   ports:
+  #     - "1400:1400"
+
+  # peer3.org1.example.com:
+  #   environment:
+  #     - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
+  #     - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb3:1400
+  #   depends_on:
+  #     - couchdb3
+
+  couchdb4:
+    container_name: couchdb4
+    extends:
+      file: docker-service-extend.yaml
+      service: couchdb-extend
     ports:
-      - "7984:5984"
-    networks:
-      - test
+      - "2100:2100"
 
   peer0.org2.example.com:
     environment:
       - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
-      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb1:5984
-      # The CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME and CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD
-      # provide the credentials for ledger to connect to CouchDB.  The username and password must
-      # match the username and password set for the associated CouchDB.
-      - CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME=admin
-      - CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD=adminpw
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb4:2100
     depends_on:
-      - couchdb1
+      - couchdb4
+
+  # couchdb5:
+  #   container_name: couchdb5
+  #   extends:
+  #     file: docker-service-extend.yaml
+  #     service: couchdb-extend
+  #   ports:
+  #     - "2200:2200"
+
+  # peer1.org2.example.com:
+  #   environment:
+  #     - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
+  #     - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb5:2200
+  #   depends_on:
+  #     - couchdb5
+
+  # couchdb6:
+  #   container_name: couchdb6
+  #   extends:
+  #     file: docker-service-extend.yaml
+  #     service: couchdb-extend
+  #   ports:
+  #     - "2300:2300"
+
+  # peer2.org2.example.com:
+  #   environment:
+  #     - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
+  #     - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb6:2300
+  #   depends_on:
+  #     - couchdb6
+
+  # couchdb7:
+  #   container_name: couchdb7
+  #   extends:
+  #     file: docker-service-extend.yaml
+  #     service: couchdb-extend
+  #   ports:
+  #     - "2400:2400"
+
+  # peer3.org2.example.com:
+  #   environment:
+  #     - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
+  #     - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb7:2400
+  #   depends_on:
+  #     - couchdb7
+
+  couchdb8:
+    container_name: couchdb8
+    extends:
+      file: docker-service-extend.yaml
+      service: couchdb-extend
+    ports:
+      - "3100:3100"
+
+  peer0.org3.example.com:
+    environment:
+      - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb8:3100
+    depends_on:
+      - couchdb8
+
+  # couchdb9:
+  #   container_name: couchdb9
+  #   extends:
+  #     file: docker-service-extend.yaml
+  #     service: couchdb-extend
+  #   ports:
+  #     - "3200:3200"
+
+  # peer1.org3.example.com:
+  #   environment:
+  #     - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
+  #     - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb9:3200
+  #   depends_on:
+  #     - couchdb9
+
+  # couchdb10:
+  #   container_name: couchdb10
+  #   extends:
+  #     file: docker-service-extend.yaml
+  #     service: couchdb-extend
+  #   ports:
+  #     - "3300:3300"
+
+  # peer2.org3.example.com:
+  #   environment:
+  #     - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
+  #     - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb10:3300
+  #   depends_on:
+  #     - couchdb10
+
+  # couchdb11:
+  #   container_name: couchdb11
+  #   extends:
+  #     file: docker-service-extend.yaml
+  #     service: couchdb-extend
+  #   ports:
+  #     - "3400:3400"
+
+  # peer3.org3.example.com:
+  #   environment:
+  #     - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
+  #     - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb11:3400
+  #   depends_on:
+  #     - couchdb11
+
+  couchdb12:
+    container_name: couchdb12
+    extends:
+      file: docker-service-extend.yaml
+      service: couchdb-extend
+    ports:
+      - "4100:4100"
+
+  peer0.org4.example.com:
+    environment:
+      - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb12:4100
+    depends_on:
+      - couchdb12
+
+  # couchdb13:
+  #   container_name: couchdb13
+  #   extends:
+  #     file: docker-service-extend.yaml
+  #     service: couchdb-extend
+  #   ports:
+  #     - "4200:4200"
+
+  # peer1.org4.example.com:
+  #   environment:
+  #     - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
+  #     - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb13:4200
+  #   depends_on:
+  #     - couchdb13
+
+  # couchdb14:
+  #   container_name: couchdb14
+  #   extends:
+  #     file: docker-service-extend.yaml
+  #     service: couchdb-extend
+  #   ports:
+  #     - "4300:4300"
+
+  # peer2.org4.example.com:
+  #   environment:
+  #     - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
+  #     - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb14:4300
+  #   depends_on:
+  #     - couchdb14
+
+  # couchdb15:
+  #   container_name: couchdb15
+  #   extends:
+  #     file: docker-service-extend.yaml
+  #     service: couchdb-extend
+  #   ports:
+  #     - "4400:4400"
+
+  # peer3.org4.example.com:
+  #   environment:
+  #     - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
+  #     - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb15:4400
+  #   depends_on:
+  #     - couchdb1
