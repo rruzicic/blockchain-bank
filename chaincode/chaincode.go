@@ -189,3 +189,45 @@ func (s *SmartContract) ReadClient(ctx contractapi.TransactionContextInterface, 
 
     return &client, nil
   }
+
+func (s *SmartContract) AddAcount2Client(ctx contractapi.TransactionContextInterface, clientId string, id string, currency string) error {
+	//first check if account already exists
+	exists, err := s.AssetExists(ctx, id)
+    if err != nil {
+      return err
+    }
+    if exists {
+      return fmt.Errorf("the account %s already exists", id)
+    }
+
+	account := Account {
+		Id:			id,
+		Ballance: 	0.0,
+		Currency:	currency,
+	}
+
+	//then create the account
+	accountJSON, err := json.Marshal(account)
+    if err != nil {
+      return err
+    }
+	//and push it to world-state
+    err = ctx.GetStub().PutState(id, accountJSON)
+	if err != nil {
+		return err
+	}
+
+	//after that get the wanted client
+    client, err := s.ReadClient(ctx, clientId)
+    if err != nil {
+      return err
+    }
+	//and add the account to him
+    client.Accounts = append(client.Accounts, account)
+    clientJSON, err := json.Marshal(client)
+    if err != nil {
+      return err
+    }
+	//push the updated client to world-state
+    return ctx.GetStub().PutState(id, clientJSON)
+  }
