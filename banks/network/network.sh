@@ -208,4 +208,4 @@ function deployCC() {
   fi
 }
 
-createOrgs
+networkUp
