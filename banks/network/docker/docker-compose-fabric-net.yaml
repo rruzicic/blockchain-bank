@@ -35,16 +35,16 @@ services:
       file: docker-service-extend.yaml
       service: orderer-extend
     environment:
-      - ORDERER_GENERAL_LISTENPORT=5000
+      - ORDERER_GENERAL_LISTENPORT=5001
       - ORDERER_GENERAL_LOCALMSPID=Orderer1MSP
-      - ORDERER_OPERATIONS_LISTENADDRESS=orderer1.example.com:5111
+      - ORDERER_OPERATIONS_LISTENADDRESS=orderer1.example.com:5011
     volumes:
       - ../organizations/ordererOrganizations/example.com/orderers/orderer1.example.com/msp:/var/hyperledger/orderer/msp
       - ../organizations/ordererOrganizations/example.com/orderers/orderer1.example.com/tls/:/var/hyperledger/orderer/tls
       - orderer1.example.com:/var/hyperledger/production/orderer
     ports:
-      - 5000:5000
-      - 5111:5111
+      - 5001:5001
+      - 5011:5011
 
   # orderer2.example.com:
   #   container_name: orderer2.example.com
@@ -52,16 +52,16 @@ services:
   #     file: docker-service-extend.yaml
   #     service: orderer-extend
   #   environment:
-  #     - ORDERER_GENERAL_LISTENPORT=6000
+  #     - ORDERER_GENERAL_LISTENPORT=6001
   #     - ORDERER_GENERAL_LOCALMSPID=Orderer2MSP
-  #     - ORDERER_OPERATIONS_LISTENADDRESS=orderer2.example.com:6111
+  #     - ORDERER_OPERATIONS_LISTENADDRESS=orderer2.example.com:6011
   #   volumes:
   #     - ../organizations/ordererOrganizations/example.com/orderers/orderer2.example.com/msp:/var/hyperledger/orderer/msp
   #     - ../organizations/ordererOrganizations/example.com/orderers/orderer2.example.com/tls/:/var/hyperledger/orderer/tls
   #     - orderer2.example.com:/var/hyperledger/production/orderer
   #   ports:
-  #     - 6000:6000
-  #     - 6111:6111
+  #     - 6001:6001
+  #     - 6011:6011
 
   peer0.org1.example.com:
     container_name: peer0.org1.example.com
