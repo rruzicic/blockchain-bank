@@ -23,7 +23,7 @@ CHANNEL_NAME_2="channel2"
 ORDERER_PORT_1=5001
 ORDERER_PORT_2=6001
 
-. utils.sh
+. scripts/utils.sh
 
 
 function createOrgs() {
