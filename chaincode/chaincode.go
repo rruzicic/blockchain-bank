@@ -341,3 +341,56 @@ func (s *SmartContract) AddAcount2Client(ctx contractapi.TransactionContextInter
 	//push the updated account to world-state
 	return ctx.GetStub().PutState(id, accountJSON)
   }
+
+  func (s *SmartContract) TransferMoney(ctx contractapi.TransactionContextInterface, idAccountFrom string, idAccountTo string, ammount float64) error {
+	//check if ammount is > 0
+	if ammount <= 0 {
+		return fmt.Errorf("The ammount must be greater than 0")
+	}
+
+	//read both accounts
+	accountFrom, err := s.ReadAccount(ctx, idAccountFrom)
+	if err != nil {
+		return err
+	}
+	accountTo, err := s.ReadAccount(ctx, idAccountTo)
+	if err != nil {
+		return err
+	}
+
+	//check if the accounts are of different currency
+	if accountFrom.Currency != accountTo.Currency {
+		if accountFrom.Currency == "RSD" {
+			ammount = ammount / 117
+		} else if accountFrom.Currency == "EUR" {
+			ammount = ammount * 117
+		}
+	}
+
+	//check if there's enough money on accountFrom
+	if accountFrom.Ballance < ammount {
+		return fmt.Errorf("There's not enough money on account for the transfer")
+	}
+
+	accountFrom -= ammount
+	accountTo += ammount
+	accountFromJSON, err := json.Marshal(accountFrom)
+	if err != nil {
+		return err
+	}
+	accountToJSON, err := json.Marshal(accountTo)
+	if err != nil {
+		return err
+	}
+
+	err = ctx.GetStub().PutState(idAccountFrom, accountFromJSON)
+	if err != nil {
+		return err
+	}
+	err = ctx.GetStub().PutState(idAccountTo, accountToJSON)
+	if err != nil {
+		return err
+	}
+	
+	return nil
+  }
