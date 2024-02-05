@@ -29,7 +29,7 @@
         "peer0.org${ORG}.example.com": {
             "url": "grpcs://localhost:${P0PORT}",
             "tlsCACerts": {
-                "pem": "${P0PEM}"
+                "pem": "${PEERPEM}"
             },
             "grpcOptions": {
                 "ssl-target-name-override": "peer0.org${ORG}.example.com",
@@ -39,7 +39,7 @@
         "peer1.org${ORG}.example.com": {
             "url": "grpcs://localhost:${P1PORT}",
             "tlsCACerts": {
-                "pem": "${P1PEM}"
+                "pem": "${PEERPEM}"
             },
             "grpcOptions": {
                 "ssl-target-name-override": "peer1.org${ORG}.example.com",
@@ -49,7 +49,7 @@
         "peer2.org${ORG}.example.com": {
             "url": "grpcs://localhost:${P2PORT}",
             "tlsCACerts": {
-                "pem": "${P2PEM}"
+                "pem": "${PEERPEM}"
             },
             "grpcOptions": {
                 "ssl-target-name-override": "peer2.org${ORG}.example.com",
@@ -59,7 +59,7 @@
         "peer3.org${ORG}.example.com": {
             "url": "grpcs://localhost:${P3PORT}",
             "tlsCACerts": {
-                "pem": "${P3PEM}"
+                "pem": "${PEERPEM}"
             },
             "grpcOptions": {
                 "ssl-target-name-override": "peer3.org${ORG}.example.com",
@@ -72,9 +72,7 @@
             "url": "https://localhost:${CAPORT}",
             "caName": "ca-org${ORG}",
             "tlsCACerts": {
-                "pem": [
-                    "${CAPEM}"
-                ]
+                "pem": "${CAPEM}"
             },
             "httpOptions": {
                 "verify": false

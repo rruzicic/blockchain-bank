@@ -1,4 +1,3 @@
----
 name: test-network-org${ORG}
 version: 1.0.0
 client:
@@ -11,18 +10,18 @@ organizations:
   Org${ORG}:
     mspid: Org${ORG}MSP
     peers:
-      - peer0.org${ORG}.example.com
-      - peer1.org${ORG}.example.com
-      - peer2.org${ORG}.example.com
-      - peer3.org${ORG}.example.com
+    - peer0.org${ORG}.example.com
+    - peer1.org${ORG}.example.com
+    - peer2.org${ORG}.example.com
+    - peer3.org${ORG}.example.com
     certificateAuthorities:
-      - ca.org${ORG}.example.com
+    - ca.org${ORG}.example.com
 peers:
   peer0.org${ORG}.example.com:
     url: grpcs://localhost:${P0PORT}
     tlsCACerts:
       pem: |
-        ${P0PEM}
+        ${PEERPEM}
     grpcOptions:
       ssl-target-name-override: peer0.org${ORG}.example.com
       hostnameOverride: peer0.org${ORG}.example.com
@@ -30,7 +29,7 @@ peers:
     url: grpcs://localhost:${P1PORT}
     tlsCACerts:
       pem: |
-        ${P1PEM}
+        ${PEERPEM}
     grpcOptions:
       ssl-target-name-override: peer1.org${ORG}.example.com
       hostnameOverride: peer1.org${ORG}.example.com
@@ -38,7 +37,7 @@ peers:
     url: grpcs://localhost:${P2PORT}
     tlsCACerts:
       pem: |
-        ${P2PEM}
+        ${PEERPEM}
     grpcOptions:
       ssl-target-name-override: peer2.org${ORG}.example.com
       hostnameOverride: peer2.org${ORG}.example.com
@@ -46,7 +45,7 @@ peers:
     url: grpcs://localhost:${P3PORT}
     tlsCACerts:
       pem: |
-        ${P3PEM}
+        ${PEERPEM}
     grpcOptions:
       ssl-target-name-override: peer3.org${ORG}.example.com
       hostnameOverride: peer3.org${ORG}.example.com
@@ -57,7 +56,7 @@ certificateAuthorities:
     caName: ca-org${ORG}
     tlsCACerts:
       pem:
-        - |
-          ${CAPEM}
+      - |
+        ${CAPEM}
     httpOptions:
       verify: false
