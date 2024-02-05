@@ -309,3 +309,35 @@ func (s *SmartContract) AddAcount2Client(ctx contractapi.TransactionContextInter
 	return ctx.GetStub().PutState(id, accountJSON)
 
   }
+
+  func (s *SmartContract) WithdrawMoney(ctx contractapi.TransactionContextInterface, id string, ammount float64) error {
+	//first check if account actually exists
+	exists, err := s.AssetExists(ctx, id)
+    if err != nil {
+      return err
+    }
+    if exists == false {
+      return fmt.Errorf("the account %s doesn't exist", id)
+    }
+
+	//after that get the wanted account
+	account, err := s.ReadAccount(ctx, id)
+	if err != nil {
+		return err
+	}
+
+	//check if account has enough money to make the withdrawal
+	if account.Ballance < ammount {
+		return fmt.Errorf("The account %s doesn't have enough funds", id)
+	}
+
+	//remove the ammount
+	account.Ballance -= ammount
+	accountJSON, err := json.Marshal(account)
+	if err != nil {
+		return err
+	}
+
+	//push the updated account to world-state
+	return ctx.GetStub().PutState(id, accountJSON)
+  }
