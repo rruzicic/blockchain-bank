@@ -217,6 +217,25 @@ func (s *SmartContract) ReadClient(ctx contractapi.TransactionContextInterface, 
     return &client, nil
   }
 
+// ReadAccount returns the account stored in the world state with given id.
+func (s *SmartContract) ReadAccount(ctx contractapi.TransactionContextInterface, id string) (*Account, error) {
+    accountJSON, err := ctx.GetStub().GetState(id)
+    if err != nil {
+      return nil, fmt.Errorf("failed to read from world state: %v", err)
+    }
+    if accountJSON == nil {
+      return nil, fmt.Errorf("the account %s does not exist", id)
+    }
+
+    var account Account
+    err = json.Unmarshal(accountJSON, &account)
+    if err != nil {
+      return nil, err
+    }
+
+    return &account, nil
+  }
+
 func (s *SmartContract) AddAcount2Client(ctx contractapi.TransactionContextInterface, clientId string, id string, currency string) error {
 	//first check if account already exists
 	exists, err := s.AssetExists(ctx, id)
@@ -257,4 +276,36 @@ func (s *SmartContract) AddAcount2Client(ctx contractapi.TransactionContextInter
     }
 	//push the updated client to world-state
     return ctx.GetStub().PutState(id, clientJSON)
+  }
+
+  func (s *SmartContract) DepositMoney(ctx contractapi.TransactionContextInterface, id string, ammount float64) error {
+	//first check if account actually exists
+	exists, err := s.AssetExists(ctx, id)
+    if err != nil {
+      return err
+    }
+    if exists == false {
+      return fmt.Errorf("the account %s doesn't exist", id)
+    }
+
+	//check if ammount is > 0
+	if ammount <= 0 {
+		return fmt.Errorf("the ammount must be bigger than 0")
+	}
+
+	//after that get the wanted account
+	account, err := s.ReadAccount(ctx, id)
+	if err != nil {
+		return err
+	}
+	//add the wanted ammount
+	account.Ballance += ammount
+	accountJSON, err := json.Marshal(account)
+	if err != nil {
+		return err
+	}
+
+	//push the updated account to world-state
+	return ctx.GetStub().PutState(id, accountJSON)
+
   }
