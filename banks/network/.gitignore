@@ -1,3 +1,4 @@
 /bin
 /organizations/fabric-ca/
 /organizations/peerOrganizations/
+/organizations/ordererOrganizations/
