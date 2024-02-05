@@ -209,3 +209,4 @@ function deployCC() {
 }
 
 networkUp
+# docker compose -f $COMPOSE_FILE_BASE -f $COMPOSE_FILE_COUCH -f $COMPOSE_FILE_CA down --volumes --remove-orphans

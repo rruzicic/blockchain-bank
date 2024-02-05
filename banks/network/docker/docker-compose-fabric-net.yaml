@@ -37,14 +37,14 @@ services:
     environment:
       - ORDERER_GENERAL_LISTENPORT=5000
       - ORDERER_GENERAL_LOCALMSPID=Orderer1MSP
-      - ORDERER_OPERATIONS_LISTENADDRESS=orderer1.example.com:5100
+      - ORDERER_OPERATIONS_LISTENADDRESS=orderer1.example.com:5111
     volumes:
       - ../organizations/ordererOrganizations/example.com/orderers/orderer1.example.com/msp:/var/hyperledger/orderer/msp
       - ../organizations/ordererOrganizations/example.com/orderers/orderer1.example.com/tls/:/var/hyperledger/orderer/tls
       - orderer1.example.com:/var/hyperledger/production/orderer
     ports:
       - 5000:5000
-      - 5100:5100
+      - 5111:5111
 
   # orderer2.example.com:
   #   container_name: orderer2.example.com
@@ -54,14 +54,14 @@ services:
   #   environment:
   #     - ORDERER_GENERAL_LISTENPORT=6000
   #     - ORDERER_GENERAL_LOCALMSPID=Orderer2MSP
-  #     - ORDERER_OPERATIONS_LISTENADDRESS=orderer2.example.com:6100
+  #     - ORDERER_OPERATIONS_LISTENADDRESS=orderer2.example.com:6111
   #   volumes:
   #     - ../organizations/ordererOrganizations/example.com/orderers/orderer2.example.com/msp:/var/hyperledger/orderer/msp
   #     - ../organizations/ordererOrganizations/example.com/orderers/orderer2.example.com/tls/:/var/hyperledger/orderer/tls
   #     - orderer2.example.com:/var/hyperledger/production/orderer
   #   ports:
   #     - 6000:6000
-  #     - 6100:6100
+  #     - 6111:6111
 
   peer0.org1.example.com:
     container_name: peer0.org1.example.com

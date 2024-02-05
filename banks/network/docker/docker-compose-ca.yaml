@@ -17,10 +17,10 @@ services:
       - FABRIC_CA_SERVER_CA_NAME=ca-org1
       - FABRIC_CA_SERVER_TLS_ENABLED=true
       - FABRIC_CA_SERVER_PORT=1000
-      - FABRIC_CA_SERVER_OPERATIONS_LISTENADDRESS=0.0.0.0:1100
+      - FABRIC_CA_SERVER_OPERATIONS_LISTENADDRESS=0.0.0.0:1111
     ports:
       - "1000:1000"
-      - "1100:1100"
+      - "1111:1111"
     command: sh -c 'fabric-ca-server start -b admin:adminpw -d'
     volumes:
       - ../organizations/fabric-ca/org1:/etc/hyperledger/fabric-ca-server
@@ -35,10 +35,10 @@ services:
       - FABRIC_CA_SERVER_CA_NAME=ca-org2
       - FABRIC_CA_SERVER_TLS_ENABLED=true
       - FABRIC_CA_SERVER_PORT=2000
-      - FABRIC_CA_SERVER_OPERATIONS_LISTENADDRESS=0.0.0.0:2100
+      - FABRIC_CA_SERVER_OPERATIONS_LISTENADDRESS=0.0.0.0:2111
     ports:
       - "2000:2000"
-      - "2100:2100"
+      - "2111:2111"
     command: sh -c 'fabric-ca-server start -b admin:adminpw -d'
     volumes:
       - ../organizations/fabric-ca/org2:/etc/hyperledger/fabric-ca-server
@@ -53,10 +53,10 @@ services:
       - FABRIC_CA_SERVER_CA_NAME=ca-org3
       - FABRIC_CA_SERVER_TLS_ENABLED=true
       - FABRIC_CA_SERVER_PORT=3000
-      - FABRIC_CA_SERVER_OPERATIONS_LISTENADDRESS=0.0.0.0:3100
+      - FABRIC_CA_SERVER_OPERATIONS_LISTENADDRESS=0.0.0.0:3111
     ports:
       - "3000:3000"
-      - "3100:3100"
+      - "3111:3111"
     command: sh -c 'fabric-ca-server start -b admin:adminpw -d'
     volumes:
       - ../organizations/fabric-ca/org3:/etc/hyperledger/fabric-ca-server
@@ -71,10 +71,10 @@ services:
       - FABRIC_CA_SERVER_CA_NAME=ca-org4
       - FABRIC_CA_SERVER_TLS_ENABLED=true
       - FABRIC_CA_SERVER_PORT=4000
-      - FABRIC_CA_SERVER_OPERATIONS_LISTENADDRESS=0.0.0.0:4100
+      - FABRIC_CA_SERVER_OPERATIONS_LISTENADDRESS=0.0.0.0:4111
     ports:
       - "4000:4000"
-      - "4100:4100"
+      - "4111:4111"
     command: sh -c 'fabric-ca-server start -b admin:adminpw -d'
     volumes:
       - ../organizations/fabric-ca/org4:/etc/hyperledger/fabric-ca-server
@@ -89,10 +89,10 @@ services:
       - FABRIC_CA_SERVER_CA_NAME=ca-orderer1
       - FABRIC_CA_SERVER_TLS_ENABLED=true
       - FABRIC_CA_SERVER_PORT=5000
-      - FABRIC_CA_SERVER_OPERATIONS_LISTENADDRESS=0.0.0.0:5100
+      - FABRIC_CA_SERVER_OPERATIONS_LISTENADDRESS=0.0.0.0:5111
     ports:
       - "5000:5000"
-      - "5100:5100"
+      - "5111:5111"
     command: sh -c 'fabric-ca-server start -b admin:adminpw -d'
     volumes:
       - ../organizations/fabric-ca/orderer1Org:/etc/hyperledger/fabric-ca-server
@@ -107,10 +107,10 @@ services:
       - FABRIC_CA_SERVER_CA_NAME=ca-orderer2
       - FABRIC_CA_SERVER_TLS_ENABLED=true
       - FABRIC_CA_SERVER_PORT=6000
-      - FABRIC_CA_SERVER_OPERATIONS_LISTENADDRESS=0.0.0.0:6100
+      - FABRIC_CA_SERVER_OPERATIONS_LISTENADDRESS=0.0.0.0:6111
     ports:
       - "6000:6000"
-      - "6100:6100"
+      - "6111:6111"
     command: sh -c 'fabric-ca-server start -b admin:adminpw -d'
     volumes:
       - ../organizations/fabric-ca/orderer2Org:/etc/hyperledger/fabric-ca-server
