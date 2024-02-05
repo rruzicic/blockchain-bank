@@ -13,6 +13,16 @@ export PATH=${PWD}/bin:$PATH
 export FABRIC_CFG_PATH=${PWD}/configtx
 export VERBOSE=false
 
+MAX_RETRY=5
+# default for delay between commands
+CLI_DELAY=3
+# channel name defaults to "mychannel"
+CHANNEL_NAME_1="channel1"
+CHANNEL_NAME_2="channel2"
+
+ORDERER_PORT_1=5001
+ORDERER_PORT_2=6001
+
 . utils.sh
 
 
@@ -194,7 +204,8 @@ function createChannel() {
   # more to create the channel creation transaction and the anchor peer updates.
   # configtx.yaml is mounted in the cli container, which allows us to use it to
   # create the channel artifacts
-  scripts/createChannel.sh $CHANNEL_NAME $CLI_DELAY $MAX_RETRY $VERBOSE
+  scripts/createChannel.sh $CHANNEL_NAME_1 $CLI_DELAY $MAX_RETRY $VERBOSE $ORDERER_PORT_1 1
+  scripts/createChannel.sh $CHANNEL_NAME_2 $CLI_DELAY $MAX_RETRY $VERBOSE $ORDERER_PORT_2 2
 }
 
 
@@ -209,4 +220,6 @@ function deployCC() {
 }
 
 networkUp
+createChannel
+
 # docker compose -f $COMPOSE_FILE_BASE -f $COMPOSE_FILE_COUCH -f $COMPOSE_FILE_CA down --volumes --remove-orphans
