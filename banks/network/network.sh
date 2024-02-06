@@ -208,8 +208,6 @@ function createChannel() {
   scripts/createChannel.sh $CHANNEL_NAME_2 $CLI_DELAY $MAX_RETRY $VERBOSE $ORDERER_PORT_2 2
 }
 
-
-
 ## Call the script to deploy a chaincode to the channel
 function deployCC() {
   scripts/deployCC.sh $CHANNEL_NAME $CC_NAME $CC_SRC_PATH $CC_SRC_LANGUAGE $CC_VERSION $CC_SEQUENCE $CC_INIT_FCN $CC_END_POLICY $CC_COLL_CONFIG $CLI_DELAY $MAX_RETRY $VERBOSE
@@ -219,7 +217,20 @@ function deployCC() {
   fi
 }
 
-networkUp
-createChannel
+## Parse mode
+if [[ $# -lt 1 ]] ; then
+  errorln "Not enough arguments provided"
+  exit 0
+else
+  MODE=$1
+  shift
+fi
 
-# docker compose -f $COMPOSE_FILE_BASE -f $COMPOSE_FILE_COUCH -f $COMPOSE_FILE_CA down --volumes --remove-orphans
+if [ "$MODE" == "up" ]; then
+  networkUp
+  createChannel
+elif [ "$MODE" == "down" ]; then
+  docker compose -f $COMPOSE_FILE_BASE -f $COMPOSE_FILE_COUCH -f $COMPOSE_FILE_CA down --volumes --remove-orphans
+else
+  errorln "Unknown mode"
+fi
