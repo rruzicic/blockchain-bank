@@ -15,11 +15,12 @@ fetchChannelConfig() {
   ORG=$1
   CHANNEL=$2
   OUTPUT=$3
+  ORDERER_ID=$4
 
-  if [ $CHANNEL -eq 1 ]; then
+  if [ $ORDERER_ID -eq 1 ]; then
     ORDERER_PORT=5001
     ORDERER_CA=$ORDERER_1_CA
-  elif [ $CHANNEL -eq 2 ]; then
+  elif [ $ORDERER_ID -eq 2 ]; then
     ORDERER_PORT=6001
     ORDERER_CA=$ORDERER_2_CA
   else
@@ -28,14 +29,14 @@ fetchChannelConfig() {
 
   setGlobals $ORG
 
-  infoln "Fetching the most recent configuration block for the channel"
+  infoln "Fetching the most recent configuration block for the channel $CHANNEL"
   set -x
-  peer channel fetch config config_block.pb -o orderer$CHANNEL.example.com:$ORDERER_PORT --ordererTLSHostnameOverride orderer$CHANNEL.example.com -c $CHANNEL --tls --cafile $ORDERER_CA
+  peer channel fetch config config_block${ORDERER_ID}.pb -o orderer${ORDERER_ID}.example.com:$ORDERER_PORT --ordererTLSHostnameOverride orderer${ORDERER_ID}.example.com -c $CHANNEL --tls --cafile $ORDERER_CA
   { set +x; } 2>/dev/null
 
   infoln "Decoding config block to JSON and isolating config to ${OUTPUT}"
   set -x
-  configtxlator proto_decode --input config_block.pb --type common.Block | jq .data.data[0].payload.data.config >"${OUTPUT}"
+  configtxlator proto_decode --input config_block${ORDERER_ID}.pb --type common.Block | jq .data.data[0].payload.data.config >"${OUTPUT}"
   { set +x; } 2>/dev/null
 }
 

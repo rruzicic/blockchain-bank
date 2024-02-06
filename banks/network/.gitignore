@@ -3,3 +3,7 @@
 /organizations/peerOrganizations/
 /organizations/ordererOrganizations/
 /system-genesis-block/
+log.txt
+*.log
+/channel-artifacts/
+*.tar.gz

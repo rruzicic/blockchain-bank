@@ -23,8 +23,24 @@ CHANNEL_NAME_2="channel2"
 ORDERER_PORT_1=5001
 ORDERER_PORT_2=6001
 
-. utils.sh
+. scripts/utils.sh
 
+# chaincode name defaults to "NA"
+CC_NAME="NA"
+# chaincode path defaults to "NA"
+CC_SRC_PATH="NA"
+# chaincode language defaults to "NA"
+CC_SRC_LANGUAGE="NA"
+# Chaincode version
+CC_VERSION="1.0"
+# Chaincode definition sequence
+CC_SEQUENCE=1
+# chaincode init function defaults to "NA"
+CC_INIT_FCN="NA"
+# endorsement policy defaults to "NA". This would allow chaincodes to use the majority default policy.
+CC_END_POLICY="NA"
+# collection configuration defaults to "NA"
+CC_COLL_CONFIG="NA"
 
 function createOrgs() {
   if [ -d "organizations/peerOrganizations" ]; then
@@ -189,7 +205,6 @@ function networkUp() {
   fi
 }
 
-# MORA DA SE REFAKTORISE
 # call the script to create the channel, join the peers of org1 and org2, 
 # and then update the anchor peers for each organization
 function createChannel() {
@@ -208,18 +223,119 @@ function createChannel() {
   scripts/createChannel.sh $CHANNEL_NAME_2 $CLI_DELAY $MAX_RETRY $VERBOSE $ORDERER_PORT_2 2
 }
 
-
-
 ## Call the script to deploy a chaincode to the channel
 function deployCC() {
-  scripts/deployCC.sh $CHANNEL_NAME $CC_NAME $CC_SRC_PATH $CC_SRC_LANGUAGE $CC_VERSION $CC_SEQUENCE $CC_INIT_FCN $CC_END_POLICY $CC_COLL_CONFIG $CLI_DELAY $MAX_RETRY $VERBOSE
+  scripts/deployCC.sh $CHANNEL_NAME_1 $CC_NAME $CC_SRC_PATH $CC_SRC_LANGUAGE $CC_VERSION $CC_SEQUENCE $CC_INIT_FCN $CC_END_POLICY $CC_COLL_CONFIG $CLI_DELAY $MAX_RETRY $VERBOSE 1
 
   if [ $? -ne 0 ]; then
     fatalln "Deploying chaincode failed"
   fi
 }
 
-networkUp
-createChannel
 
-# docker compose -f $COMPOSE_FILE_BASE -f $COMPOSE_FILE_COUCH -f $COMPOSE_FILE_CA down --volumes --remove-orphans
+## Parse mode
+if [[ $# -lt 1 ]] ; then
+  errorln "Not enough arguments provided"
+  exit 0
+else
+  MODE=$1
+  shift
+fi
+
+# parse flags
+while [[ $# -ge 1 ]] ; do
+  key="$1"
+  case $key in
+  -h )
+    printHelp $MODE
+    exit 0
+    ;;
+  -c )
+    CHANNEL_NAME="$2"
+    shift
+    ;;
+  -ca )
+    CRYPTO="Certificate Authorities"
+    ;;
+  -r )
+    MAX_RETRY="$2"
+    shift
+    ;;
+  -d )
+    CLI_DELAY="$2"
+    shift
+    ;;
+  -s )
+    DATABASE="$2"
+    shift
+    ;;
+  -ccl )
+    CC_SRC_LANGUAGE="$2"
+    shift
+    ;;
+  -ccn )
+    CC_NAME="$2"
+    shift
+    ;;
+  -ccv )
+    CC_VERSION="$2"
+    shift
+    ;;
+  -ccs )
+    CC_SEQUENCE="$2"
+    shift
+    ;;
+  -ccp )
+    CC_SRC_PATH="$2"
+    shift
+    ;;
+  -ccep )
+    CC_END_POLICY="$2"
+    shift
+    ;;
+  -cccg )
+    CC_COLL_CONFIG="$2"
+    shift
+    ;;
+  -cci )
+    CC_INIT_FCN="$2"
+    shift
+    ;;
+  -i )
+    IMAGETAG="$2"
+    shift
+    ;;
+  -cai )
+    CA_IMAGETAG="$2"
+    shift
+    ;;
+  -verbose )
+    VERBOSE=true
+    shift
+    ;;
+  * )
+    errorln "Unknown flag: $key"
+    printHelp
+    exit 1
+    ;;
+  esac
+  shift
+done
+
+if [ "$MODE" == "up" ]; then
+  networkUp
+  createChannel
+elif [ "$MODE" == "down" ]; then
+  docker compose -f $COMPOSE_FILE_BASE -f $COMPOSE_FILE_COUCH -f $COMPOSE_FILE_CA down --volumes --remove-orphans
+elif [ "$MODE" == "clean" ]; then
+  rm -rf organizations/fabric-ca
+  rm -rf organizations/ordererOrganizations
+  rm -rf organizations/peerOrganizations
+  rm -rf channel-artifacts
+  rm -rf system-genesis-block
+  rm -f log.txt
+elif [ "$MODE" == "deployCC" ]; then
+  deployCC
+else
+  errorln "Unknown mode"
+fi

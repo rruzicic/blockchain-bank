@@ -16,12 +16,12 @@ services:
       file: docker-service-extend.yaml
       service: couchdb-extend
     ports:
-      - "1100:1100"
+      - "1100:5984"
 
   peer0.org1.example.com:
     environment:
       - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
-      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb0:1100
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb0:5984
     depends_on:
       - couchdb0
 
@@ -31,12 +31,12 @@ services:
   #     file: docker-service-extend.yaml
   #     service: couchdb-extend
   #   ports:
-  #     - "1200:1200"
+  #     - "1200:5984"
 
   # peer1.org1.example.com:
   #   environment:
   #     - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
-  #     - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb1:1200
+  #     - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb1:5984
   #   depends_on:
   #     - couchdb1
 
@@ -46,12 +46,12 @@ services:
   #     file: docker-service-extend.yaml
   #     service: couchdb-extend
   #   ports:
-  #     - "1300:1300"
+  #     - "1300:5984"
 
   # peer2.org1.example.com:
   #   environment:
   #     - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
-  #     - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb2:1300
+  #     - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb2:5984
   #   depends_on:
   #     - couchdb2
 
@@ -61,12 +61,12 @@ services:
   #     file: docker-service-extend.yaml
   #     service: couchdb-extend
   #   ports:
-  #     - "1400:1400"
+  #     - "1400:5984"
 
   # peer3.org1.example.com:
   #   environment:
   #     - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
-  #     - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb3:1400
+  #     - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb3:5984
   #   depends_on:
   #     - couchdb3
 
@@ -76,12 +76,12 @@ services:
       file: docker-service-extend.yaml
       service: couchdb-extend
     ports:
-      - "2100:2100"
+      - "2100:5984"
 
   peer0.org2.example.com:
     environment:
       - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
-      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb4:2100
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb4:5984
     depends_on:
       - couchdb4
 
@@ -91,12 +91,12 @@ services:
   #     file: docker-service-extend.yaml
   #     service: couchdb-extend
   #   ports:
-  #     - "2200:2200"
+  #     - "2200:5984"
 
   # peer1.org2.example.com:
   #   environment:
   #     - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
-  #     - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb5:2200
+  #     - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb5:5984
   #   depends_on:
   #     - couchdb5
 
@@ -106,12 +106,12 @@ services:
   #     file: docker-service-extend.yaml
   #     service: couchdb-extend
   #   ports:
-  #     - "2300:2300"
+  #     - "2300:5984"
 
   # peer2.org2.example.com:
   #   environment:
   #     - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
-  #     - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb6:2300
+  #     - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb6:5984
   #   depends_on:
   #     - couchdb6
 
@@ -121,12 +121,12 @@ services:
   #     file: docker-service-extend.yaml
   #     service: couchdb-extend
   #   ports:
-  #     - "2400:2400"
+  #     - "2400:5984"
 
   # peer3.org2.example.com:
   #   environment:
   #     - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
-  #     - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb7:2400
+  #     - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb7:5984
   #   depends_on:
   #     - couchdb7
 
@@ -136,12 +136,12 @@ services:
       file: docker-service-extend.yaml
       service: couchdb-extend
     ports:
-      - "3100:3100"
+      - "3100:5984"
 
   peer0.org3.example.com:
     environment:
       - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
-      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb8:3100
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb8:5984
     depends_on:
       - couchdb8
 
@@ -151,12 +151,12 @@ services:
   #     file: docker-service-extend.yaml
   #     service: couchdb-extend
   #   ports:
-  #     - "3200:3200"
+  #     - "3200:5984"
 
   # peer1.org3.example.com:
   #   environment:
   #     - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
-  #     - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb9:3200
+  #     - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb9:5984
   #   depends_on:
   #     - couchdb9
 
@@ -166,12 +166,12 @@ services:
   #     file: docker-service-extend.yaml
   #     service: couchdb-extend
   #   ports:
-  #     - "3300:3300"
+  #     - "3300:5984"
 
   # peer2.org3.example.com:
   #   environment:
   #     - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
-  #     - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb10:3300
+  #     - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb10:5984
   #   depends_on:
   #     - couchdb10
 
@@ -181,12 +181,12 @@ services:
   #     file: docker-service-extend.yaml
   #     service: couchdb-extend
   #   ports:
-  #     - "3400:3400"
+  #     - "3400:5984"
 
   # peer3.org3.example.com:
   #   environment:
   #     - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
-  #     - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb11:3400
+  #     - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb11:5984
   #   depends_on:
   #     - couchdb11
 
@@ -196,12 +196,12 @@ services:
       file: docker-service-extend.yaml
       service: couchdb-extend
     ports:
-      - "4100:4100"
+      - "4100:5984"
 
   peer0.org4.example.com:
     environment:
       - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
-      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb12:4100
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb12:5984
     depends_on:
       - couchdb12
 
@@ -211,12 +211,12 @@ services:
   #     file: docker-service-extend.yaml
   #     service: couchdb-extend
   #   ports:
-  #     - "4200:4200"
+  #     - "4200:5984"
 
   # peer1.org4.example.com:
   #   environment:
   #     - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
-  #     - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb13:4200
+  #     - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb13:5984
   #   depends_on:
   #     - couchdb13
 
@@ -226,12 +226,12 @@ services:
   #     file: docker-service-extend.yaml
   #     service: couchdb-extend
   #   ports:
-  #     - "4300:4300"
+  #     - "4300:5984"
 
   # peer2.org4.example.com:
   #   environment:
   #     - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
-  #     - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb14:4300
+  #     - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb14:5984
   #   depends_on:
   #     - couchdb14
 
@@ -241,11 +241,11 @@ services:
   #     file: docker-service-extend.yaml
   #     service: couchdb-extend
   #   ports:
-  #     - "4400:4400"
+  #     - "4400:5984"
 
   # peer3.org4.example.com:
   #   environment:
   #     - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
-  #     - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb15:4400
+  #     - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb15:5984
   #   depends_on:
   #     - couchdb1

@@ -6,7 +6,7 @@ version: "2.1"
 
 volumes:
   orderer1.example.com:
-  # orderer2.example.com:
+  orderer2.example.com:
   peer0.org1.example.com:
   # peer1.org1.example.com:
   # peer2.org1.example.com:
@@ -39,29 +39,29 @@ services:
       - ORDERER_GENERAL_LOCALMSPID=Orderer1MSP
       - ORDERER_OPERATIONS_LISTENADDRESS=orderer1.example.com:5011
     volumes:
-      - ../organizations/ordererOrganizations/example.com/orderers/orderer1.example.com/msp:/var/hyperledger/orderer/msp
-      - ../organizations/ordererOrganizations/example.com/orderers/orderer1.example.com/tls/:/var/hyperledger/orderer/tls
+      - ../organizations/ordererOrganizations/orderer1.example.com/orderers/orderer1.example.com/msp:/var/hyperledger/orderer/msp
+      - ../organizations/ordererOrganizations/orderer1.example.com/orderers/orderer1.example.com/tls/:/var/hyperledger/orderer/tls
       - orderer1.example.com:/var/hyperledger/production/orderer
     ports:
       - 5001:5001
       - 5011:5011
 
-  # orderer2.example.com:
-  #   container_name: orderer2.example.com
-  #   extends:
-  #     file: docker-service-extend.yaml
-  #     service: orderer-extend
-  #   environment:
-  #     - ORDERER_GENERAL_LISTENPORT=6001
-  #     - ORDERER_GENERAL_LOCALMSPID=Orderer2MSP
-  #     - ORDERER_OPERATIONS_LISTENADDRESS=orderer2.example.com:6011
-  #   volumes:
-  #     - ../organizations/ordererOrganizations/example.com/orderers/orderer2.example.com/msp:/var/hyperledger/orderer/msp
-  #     - ../organizations/ordererOrganizations/example.com/orderers/orderer2.example.com/tls/:/var/hyperledger/orderer/tls
-  #     - orderer2.example.com:/var/hyperledger/production/orderer
-  #   ports:
-  #     - 6001:6001
-  #     - 6011:6011
+  orderer2.example.com:
+    container_name: orderer2.example.com
+    extends:
+      file: docker-service-extend.yaml
+      service: orderer-extend
+    environment:
+      - ORDERER_GENERAL_LISTENPORT=6001
+      - ORDERER_GENERAL_LOCALMSPID=Orderer2MSP
+      - ORDERER_OPERATIONS_LISTENADDRESS=orderer2.example.com:6011
+    volumes:
+      - ../organizations/ordererOrganizations/orderer2.example.com/orderers/orderer2.example.com/msp:/var/hyperledger/orderer/msp
+      - ../organizations/ordererOrganizations/orderer2.example.com/orderers/orderer2.example.com/tls/:/var/hyperledger/orderer/tls
+      - orderer2.example.com:/var/hyperledger/production/orderer
+    ports:
+      - 6001:6001
+      - 6011:6011
 
   peer0.org1.example.com:
     container_name: peer0.org1.example.com
