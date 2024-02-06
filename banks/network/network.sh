@@ -25,6 +25,22 @@ ORDERER_PORT_2=6001
 
 . scripts/utils.sh
 
+# chaincode name defaults to "NA"
+CC_NAME="NA"
+# chaincode path defaults to "NA"
+CC_SRC_PATH="NA"
+# chaincode language defaults to "NA"
+CC_SRC_LANGUAGE="NA"
+# Chaincode version
+CC_VERSION="1.0"
+# Chaincode definition sequence
+CC_SEQUENCE=1
+# chaincode init function defaults to "NA"
+CC_INIT_FCN="NA"
+# endorsement policy defaults to "NA". This would allow chaincodes to use the majority default policy.
+CC_END_POLICY="NA"
+# collection configuration defaults to "NA"
+CC_COLL_CONFIG="NA"
 
 function createOrgs() {
   if [ -d "organizations/peerOrganizations" ]; then
@@ -209,7 +225,7 @@ function createChannel() {
 
 ## Call the script to deploy a chaincode to the channel
 function deployCC() {
-  scripts/deployCC.sh $CHANNEL_NAME $CC_NAME $CC_SRC_PATH $CC_SRC_LANGUAGE $CC_VERSION $CC_SEQUENCE $CC_INIT_FCN $CC_END_POLICY $CC_COLL_CONFIG $CLI_DELAY $MAX_RETRY $VERBOSE
+  scripts/deployCC.sh $CHANNEL_NAME_1 $CC_NAME $CC_SRC_PATH $CC_SRC_LANGUAGE $CC_VERSION $CC_SEQUENCE $CC_INIT_FCN $CC_END_POLICY $CC_COLL_CONFIG $CLI_DELAY $MAX_RETRY $VERBOSE 1
 
   if [ $? -ne 0 ]; then
     fatalln "Deploying chaincode failed"
@@ -237,6 +253,8 @@ elif [ "$MODE" == "clean" ]; then
   rm -rf channel-artifacts
   rm -rf system-genesis-block
   rm -f log.txt
+elif [ "$MODE" == "deployCC" ]; then
+  deployCC
 else
   errorln "Unknown mode"
 fi
