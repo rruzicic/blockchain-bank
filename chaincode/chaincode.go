@@ -229,6 +229,25 @@ func (s *SmartContract) ReadClient(ctx contractapi.TransactionContextInterface, 
 	return &client, nil
 }
 
+// ReadAccount returns the account stored in the world state with given id.
+func (s *SmartContract) ReadAccount(ctx contractapi.TransactionContextInterface, id string) (*Account, error) {
+    accountJSON, err := ctx.GetStub().GetState(id)
+    if err != nil {
+      return nil, fmt.Errorf("failed to read from world state: %v", err)
+    }
+    if accountJSON == nil {
+      return nil, fmt.Errorf("the account %s does not exist", id)
+    }
+
+    var account Account
+    err = json.Unmarshal(accountJSON, &account)
+    if err != nil {
+      return nil, err
+    }
+
+    return &account, nil
+  }
+
 func (s *SmartContract) AddAcount2Client(ctx contractapi.TransactionContextInterface, clientId string, id string, currency string) error {
 	//first check if account already exists
 	exists, err := s.AssetExists(ctx, id)
@@ -268,5 +287,122 @@ func (s *SmartContract) AddAcount2Client(ctx contractapi.TransactionContextInter
 		return err
 	}
 	//push the updated client to world-state
-	return ctx.GetStub().PutState(id, clientJSON)
-}
+    return ctx.GetStub().PutState(id, clientJSON)
+  }
+
+  func (s *SmartContract) DepositMoney(ctx contractapi.TransactionContextInterface, id string, ammount float64) error {
+	//first check if account actually exists
+	exists, err := s.AssetExists(ctx, id)
+    if err != nil {
+      return err
+    }
+    if exists == false {
+      return fmt.Errorf("the account %s doesn't exist", id)
+    }
+
+	//check if ammount is > 0
+	if ammount <= 0 {
+		return fmt.Errorf("the ammount must be bigger than 0")
+	}
+
+	//after that get the wanted account
+	account, err := s.ReadAccount(ctx, id)
+	if err != nil {
+		return err
+	}
+	//add the wanted ammount
+	account.Ballance += ammount
+	accountJSON, err := json.Marshal(account)
+	if err != nil {
+		return err
+	}
+
+	//push the updated account to world-state
+	return ctx.GetStub().PutState(id, accountJSON)
+
+  }
+
+  func (s *SmartContract) WithdrawMoney(ctx contractapi.TransactionContextInterface, id string, ammount float64) error {
+	//first check if account actually exists
+	exists, err := s.AssetExists(ctx, id)
+    if err != nil {
+      return err
+    }
+    if exists == false {
+      return fmt.Errorf("the account %s doesn't exist", id)
+    }
+
+	//after that get the wanted account
+	account, err := s.ReadAccount(ctx, id)
+	if err != nil {
+		return err
+	}
+
+	//check if account has enough money to make the withdrawal
+	if account.Ballance < ammount {
+		return fmt.Errorf("The account %s doesn't have enough funds", id)
+	}
+
+	//remove the ammount
+	account.Ballance -= ammount
+	accountJSON, err := json.Marshal(account)
+	if err != nil {
+		return err
+	}
+
+	//push the updated account to world-state
+	return ctx.GetStub().PutState(id, accountJSON)
+  }
+
+  func (s *SmartContract) TransferMoney(ctx contractapi.TransactionContextInterface, idAccountFrom string, idAccountTo string, ammount float64) error {
+	//check if ammount is > 0
+	if ammount <= 0 {
+		return fmt.Errorf("The ammount must be greater than 0")
+	}
+
+	//read both accounts
+	accountFrom, err := s.ReadAccount(ctx, idAccountFrom)
+	if err != nil {
+		return err
+	}
+	accountTo, err := s.ReadAccount(ctx, idAccountTo)
+	if err != nil {
+		return err
+	}
+
+	//check if the accounts are of different currency
+	if accountFrom.Currency != accountTo.Currency {
+		if accountFrom.Currency == "RSD" {
+			ammount = ammount / 117
+		} else if accountFrom.Currency == "EUR" {
+			ammount = ammount * 117
+		}
+	}
+
+	//check if there's enough money on accountFrom
+	if accountFrom.Ballance < ammount {
+		return fmt.Errorf("There's not enough money on account for the transfer")
+	}
+
+	accountFrom -= ammount
+	accountTo += ammount
+	accountFromJSON, err := json.Marshal(accountFrom)
+	if err != nil {
+		return err
+	}
+	accountToJSON, err := json.Marshal(accountTo)
+	if err != nil {
+		return err
+	}
+
+	err = ctx.GetStub().PutState(idAccountFrom, accountFromJSON)
+	if err != nil {
+		return err
+	}
+	err = ctx.GetStub().PutState(idAccountTo, accountToJSON)
+	if err != nil {
+		return err
+	}
+	
+	return nil
+  }
