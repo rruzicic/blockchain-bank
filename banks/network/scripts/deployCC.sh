@@ -1,6 +1,7 @@
 #!/bin/bash
 
-source scripts/utils.sh
+. scripts/envVar.sh
+. scripts/utils.sh
 
 CHANNEL_NAME=${1:-"mychannel"}
 CC_NAME=${2}
@@ -118,9 +119,6 @@ if [ "$CC_COLL_CONFIG" = "NA" ]; then
 else
   CC_COLL_CONFIG="--collections-config $CC_COLL_CONFIG"
 fi
-
-# import utils
-. scripts/envVar.sh
 
 packageChaincode() {
   set -x
