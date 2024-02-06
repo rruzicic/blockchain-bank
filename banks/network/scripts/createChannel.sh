@@ -79,7 +79,7 @@ joinChannel() {
 
 setAnchorPeer() {
   ORG=$1
-  docker exec cli ./scripts/setAnchorPeer.sh $ORG $CHANNEL_NAME 
+  docker exec cli ./scripts/setAnchorPeer.sh $ORG $CHANNEL_NAME $ORDERER_ID
 }
 
 FABRIC_CFG_PATH=${PWD}/configtx

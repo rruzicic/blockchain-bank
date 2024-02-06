@@ -189,7 +189,6 @@ function networkUp() {
   fi
 }
 
-# MORA DA SE REFAKTORISE
 # call the script to create the channel, join the peers of org1 and org2, 
 # and then update the anchor peers for each organization
 function createChannel() {
@@ -231,6 +230,13 @@ if [ "$MODE" == "up" ]; then
   createChannel
 elif [ "$MODE" == "down" ]; then
   docker compose -f $COMPOSE_FILE_BASE -f $COMPOSE_FILE_COUCH -f $COMPOSE_FILE_CA down --volumes --remove-orphans
+elif [ "$MODE" == "clean" ]; then
+  rm -rf organizations/fabric-ca
+  rm -rf organizations/ordererOrganizations
+  rm -rf organizations/peerOrganizations
+  rm -rf channel-artifacts
+  rm -rf system-genesis-block
+  rm -f log.txt
 else
   errorln "Unknown mode"
 fi
