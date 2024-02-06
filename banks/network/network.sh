@@ -232,6 +232,7 @@ function deployCC() {
   fi
 }
 
+
 ## Parse mode
 if [[ $# -lt 1 ]] ; then
   errorln "Not enough arguments provided"
@@ -240,6 +241,86 @@ else
   MODE=$1
   shift
 fi
+
+# parse flags
+while [[ $# -ge 1 ]] ; do
+  key="$1"
+  case $key in
+  -h )
+    printHelp $MODE
+    exit 0
+    ;;
+  -c )
+    CHANNEL_NAME="$2"
+    shift
+    ;;
+  -ca )
+    CRYPTO="Certificate Authorities"
+    ;;
+  -r )
+    MAX_RETRY="$2"
+    shift
+    ;;
+  -d )
+    CLI_DELAY="$2"
+    shift
+    ;;
+  -s )
+    DATABASE="$2"
+    shift
+    ;;
+  -ccl )
+    CC_SRC_LANGUAGE="$2"
+    shift
+    ;;
+  -ccn )
+    CC_NAME="$2"
+    shift
+    ;;
+  -ccv )
+    CC_VERSION="$2"
+    shift
+    ;;
+  -ccs )
+    CC_SEQUENCE="$2"
+    shift
+    ;;
+  -ccp )
+    CC_SRC_PATH="$2"
+    shift
+    ;;
+  -ccep )
+    CC_END_POLICY="$2"
+    shift
+    ;;
+  -cccg )
+    CC_COLL_CONFIG="$2"
+    shift
+    ;;
+  -cci )
+    CC_INIT_FCN="$2"
+    shift
+    ;;
+  -i )
+    IMAGETAG="$2"
+    shift
+    ;;
+  -cai )
+    CA_IMAGETAG="$2"
+    shift
+    ;;
+  -verbose )
+    VERBOSE=true
+    shift
+    ;;
+  * )
+    errorln "Unknown flag: $key"
+    printHelp
+    exit 1
+    ;;
+  esac
+  shift
+done
 
 if [ "$MODE" == "up" ]; then
   networkUp
