@@ -334,6 +334,7 @@ elif [ "$MODE" == "clean" ]; then
   rm -rf channel-artifacts
   rm -rf system-genesis-block
   rm -f log.txt
+  rm -f *.tar.gz
 elif [ "$MODE" == "deployCC" ]; then
   deployCC
 else
