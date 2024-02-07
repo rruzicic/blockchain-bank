@@ -17,18 +17,9 @@ createAnchorPeerUpdate() {
 
   infoln "Generating anchor peer update transaction for Org${ORG} on channel $CHANNEL_NAME"
 
-  if [ $ORG -eq 1 ]; then
-    HOST="peer0.org1.example.com"
-    PORT=1001
-  elif [ $ORG -eq 2 ]; then
-    HOST="peer0.org2.example.com"
-    PORT=2001
-  elif [ $ORG -eq 3 ]; then
-    HOST="peer0.org3.example.com"
-    PORT=3001
-  elif [ $ORG -eq 4 ]; then
-    HOST="peer0.org4.example.com"
-    PORT=4001
+  if [ -n "$ORG" ] && [ "$ORG" -eq "$ORG" ] 2>/dev/null; then
+    HOST="peer${1}.org${ORG}.example.com"
+    PORT=${ORG}001
   else
     errorln "Org${ORG} unknown"
   fi
@@ -65,8 +56,19 @@ updateAnchorPeer() {
 ORG=$1
 CHANNEL_NAME=$2
 ORDERER_ID=$3
-setGlobalsCLI $ORG
 
-createAnchorPeerUpdate
+setGlobalsCLI $ORG 0
+createAnchorPeerUpdate 0
+updateAnchorPeer
 
+setGlobalsCLI $ORG 1
+createAnchorPeerUpdate 1
+updateAnchorPeer
+
+setGlobalsCLI $ORG 2
+createAnchorPeerUpdate 2
+updateAnchorPeer
+
+setGlobalsCLI $ORG 3
+createAnchorPeerUpdate 3
 updateAnchorPeer
