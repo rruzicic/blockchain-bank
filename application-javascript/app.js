@@ -13,9 +13,9 @@ const { buildCAClient, registerAndEnrollUser, enrollAdmin } = require('./util/CA
 const { buildCCPOrg, buildWallet } = require('./util/AppUtil.js');
 
 const channelName = 'channel1';
-const chaincodeName = 'basic';
+const chaincodeName = 'basic-4';
 const walletPath = path.join(__dirname, 'wallets');
-const org1UserId = 'appUser002';
+const org1UserId = 'appUser004';
 
 function prettyJSONString(inputString) {
 	return JSON.stringify(JSON.parse(inputString), null, 2);
@@ -217,7 +217,7 @@ async function addClient(contract) {
 async function readClient(contract) {
 	const prompt = require("prompt-sync")({ sigint: true });
 	const id = prompt('ID: ');
-	console.log('\n--> Evaluate Transaction: ReadAsset, function returns "asset1" attributes');
+	console.log('\n--> Evaluate Transaction: ReadClient');
 	const result = await contract.evaluateTransaction('ReadClient', id);
 	console.log(`*** Result: ${prettyJSONString(result.toString())}`);
 }
@@ -228,6 +228,66 @@ async function initLedger(contract) {
 	console.log('*** Result: committed');
 }
 
+async function queryClientsByFirstName(contract) {
+	const prompt = require("prompt-sync")({ sigint: true });
+	const id = prompt('Name: ');
+	console.log('\n--> Evaluate Transaction: QueryClientsByFirstName');
+	const result = await contract.evaluateTransaction('QueryClientsByFirstName', id);
+	console.log(`*** Result: ${result.toString()}`);
+}
+
+async function depositMoney(contract) {
+	const prompt = require("prompt-sync")({ sigint: true });
+	const id = prompt('ID: ');
+	const amount = prompt('Amount: ');
+
+	try {
+		// How about we try a transactions where the executing chaincode throws an error
+		// Notice how the submitTransaction will throw an error containing the error thrown by the chaincode
+		console.log('\n--> Submit Transaction: CreateClient');
+		await contract.submitTransaction('DepositMoney', id, amount);
+		console.log('******** SUCCESS: deposited money');
+
+	} catch (error) {
+		console.log(`*** FAILED with error: \n    ${error}`);
+	}
+}
+
+async function withdrawMoney(contract) {
+	const prompt = require("prompt-sync")({ sigint: true });
+	const id = prompt('ID: ');
+	const amount = prompt('Amount: ');
+
+	try {
+		// How about we try a transactions where the executing chaincode throws an error
+		// Notice how the submitTransaction will throw an error containing the error thrown by the chaincode
+		console.log('\n--> Submit Transaction: CreateClient');
+		await contract.submitTransaction('WithdrawMoney', id, amount);
+		console.log('******** SUCCESS: withdrawed money');
+
+	} catch (error) {
+		console.log(`*** FAILED with error: \n    ${error}`);
+	}
+}
+
+async function transferMoney(contract) {
+	const prompt = require("prompt-sync")({ sigint: true });
+	const from = prompt('From: ');
+	const to = prompt('To: ');
+	const amount = prompt('Amount: ');
+	console.log('\n--> Submit Transaction: TransferMoney');
+	await contract.submitTransaction('TransferMoney', from, to, amount);
+	console.log('*** Result: committed');
+}
+
+async function readAccount(contract) {
+	const prompt = require("prompt-sync")({ sigint: true });
+	const id = prompt('ID: ');
+	console.log('\n--> Evaluate Transaction: ReadAccount');
+	const result = await contract.evaluateTransaction('ReadAccount', id);
+	console.log(`*** Result: ${prettyJSONString(result.toString())}`);
+
+}
 async function consoleApp() {
 	const prompt = require("prompt-sync")({ sigint: true });
 	console.log("First lets get you signed in!");
@@ -239,6 +299,11 @@ async function consoleApp() {
 		console.log("1 - Init ledger");
 		console.log("2 - Add client");
 		console.log("3 - Read client with ID");
+		console.log("4 - QueryClientsByFirstName");
+		console.log("5 - Deposit money");
+		console.log("6 - Withdraw money");
+		console.log("7 - Transfer money");
+		console.log("8 - Read account");
 
 		console.log("Press any other key to exit");
 
@@ -249,13 +314,24 @@ async function consoleApp() {
 			await addClient(contract);
 		} else if (option == 3) {
 			await readClient(contract);
-		} else {
+		} else if (option == 4) {
+			await queryClientsByFirstName(contract);
+		} else if (option == 5) {
+			await depositMoney(contract);
+		} else if (option == 6) {
+			await withdrawMoney(contract);
+		} else if (option == 7) {
+			await transferMoney(contract);
+		} else if (option == 8) {
+			await readAccount(contract);
+		}
+		else {
 			break;
 		}
-
 	}
 
 }
+
 
 // main();
 consoleApp()

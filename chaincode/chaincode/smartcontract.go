@@ -396,8 +396,8 @@ func (s *SmartContract) TransferMoney(ctx contractapi.TransactionContextInterfac
 	return nil
 }
 
-//======================================================================
-func (s *SmartContract) QueryClientsByFirstName(ctx contractapi.TransactionContextInterface, firstName string) ([]Client, error){
+// ======================================================================
+func (s *SmartContract) QueryClientsByFirstName(ctx contractapi.TransactionContextInterface, firstName string) ([]Client, error) {
 	var result []Client
 	searchQuery := strings.ToLower(firstName)
 	queryString := fmt.Sprintf(`{
@@ -431,7 +431,7 @@ func (s *SmartContract) QueryClientsByFirstName(ctx contractapi.TransactionConte
 	return result, nil
 }
 
-func (s *SmartContract) QueryClientsByLastName(ctx contractapi.TransactionContextInterface, lastName string) ([]Client, error){
+func (s *SmartContract) QueryClientsByLastName(ctx contractapi.TransactionContextInterface, lastName string) ([]Client, error) {
 	var result []Client
 	searchQuery := strings.ToLower(lastName)
 	queryString := fmt.Sprintf(`{
@@ -465,7 +465,7 @@ func (s *SmartContract) QueryClientsByLastName(ctx contractapi.TransactionContex
 	return result, nil
 }
 
-func (s *SmartContract) QueryClientsByLastNameAndEmail(ctx contractapi.TransactionContextInterface, lastName string, email string) ([]Client, error){
+func (s *SmartContract) QueryClientsByLastNameAndEmail(ctx contractapi.TransactionContextInterface, lastName string, email string) ([]Client, error) {
 	var result []Client
 	lastNameQuery := strings.ToLower(lastName)
 	emailQuery := strings.ToLower(email)
@@ -501,7 +501,7 @@ func (s *SmartContract) QueryClientsByLastNameAndEmail(ctx contractapi.Transacti
 	return result, nil
 }
 
-func (s *SmartContract) QueryAccountsByNumber(ctx contractapi.TransactionContextInterface, accNum string) ([]Account, error){
+func (s *SmartContract) QueryAccountsByNumber(ctx contractapi.TransactionContextInterface, accNum string) ([]Account, error) {
 	var result []Account
 	searchQuery := strings.ToLower(accNum)
 	queryString := fmt.Sprintf(`{
@@ -534,6 +534,7 @@ func (s *SmartContract) QueryAccountsByNumber(ctx contractapi.TransactionContext
 
 	return result, nil
 }
+
 
 func (s *SmartContract) QueryGetMiddleClassAccounts(ctx contractapi.TransactionContextInterface, lower float64, upper float64) ([]Account, error){
 	var result []Account
@@ -579,4 +580,5 @@ func (s *SmartContract) QueryGetMiddleClassAccounts(ctx contractapi.TransactionC
 
 	return result, nil
 }
+
 
