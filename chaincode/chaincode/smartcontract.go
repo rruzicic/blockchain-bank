@@ -3,6 +3,7 @@ package chaincode
 import (
 	"encoding/json"
 	"fmt"
+	"strings"
 
 	"github.com/hyperledger/fabric-contract-api-go/contractapi"
 )
@@ -393,4 +394,38 @@ func (s *SmartContract) TransferMoney(ctx contractapi.TransactionContextInterfac
 	}
 
 	return nil
+}
+
+//======================================================================
+func (s *SmartContract) QueryClientsByFirstName(ctx contractapi.TransactionContextInterface, firstName string) ([]Client, error){
+	var result []Client
+	searchQuery := strings.ToLower(firstName)
+	queryString := fmt.Sprintf(`{
+		"selector": {
+			"firstName": {"$regex": "(?i)%s"}
+		}
+	}`, searchQuery)
+
+	queryResults, err := ctx.GetStub().GetQueryResult(queryString)
+	if err != nil {
+		return nil, fmt.Errorf("error executing query: %v", err)
+	}
+	defer queryResults.Close()
+
+	for queryResults.HasNext() {
+		value, err := queryResults.Next()
+		if err != nil {
+			return nil, fmt.Errorf("error reading query result: %v", err)
+		}
+
+		var client Client
+		err = json.Unmarshal(value.Value, &client)
+		if err != nil {
+			return nil, fmt.Errorf("error unmarshaling client data: %v", err)
+		}
+
+		result = append(result, client)
+	}
+
+	return result, nil
 }
