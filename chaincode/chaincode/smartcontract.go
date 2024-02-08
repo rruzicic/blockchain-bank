@@ -462,3 +462,38 @@ func (s *SmartContract) QueryClientsByLastName(ctx contractapi.TransactionContex
 
 	return result, nil
 }
+
+func (s *SmartContract) QueryClientsByLastNameAndEmail(ctx contractapi.TransactionContextInterface, lastName string, email string) ([]Client, error){
+	var result []Client
+	lastNameQuery := strings.ToLower(lastName)
+	emailQuery := strings.ToLower(email)
+	queryString := fmt.Sprintf(`{
+		"selector": {
+			"lastName": {"$regex": "(?i)%s"},
+			"email": {"$regex": "(?i)%s"}
+		}
+	}`, lastNameQuery, emailQuery)
+
+	queryResults, err := ctx.GetStub().GetQueryResult(queryString)
+	if err != nil {
+		return nil, fmt.Errorf("error executing query: %v", err)
+	}
+	defer queryResults.Close()
+
+	for queryResults.HasNext() {
+		value, err := queryResults.Next()
+		if err != nil {
+			return nil, fmt.Errorf("error reading query result: %v", err)
+		}
+
+		var client Client
+		err = json.Unmarshal(value.Value, &client)
+		if err != nil {
+			return nil, fmt.Errorf("error unmarshaling client data: %v", err)
+		}
+
+		result = append(result, client)
+	}
+
+	return result, nil
+}
