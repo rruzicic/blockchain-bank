@@ -534,3 +534,49 @@ func (s *SmartContract) QueryAccountsByNumber(ctx contractapi.TransactionContext
 
 	return result, nil
 }
+
+func (s *SmartContract) QueryGetMiddleClassAccounts(ctx contractapi.TransactionContextInterface, lower float64, upper float64) ([]Account, error){
+	var result []Account
+	queryString := 
+	`{
+		"selector": {
+			"id": {"$regex": "account.*"},
+			"$and": [
+				{
+					"ballance": {
+						"$gte": ` + fmt.Sprintf("%f", lower) +`
+					}
+				},
+				{
+					"ballance": {
+						"$lte": ` + fmt.Sprintf("%f", upper) + `
+					}
+				}
+			]
+		}
+	}`
+
+	queryResults, err := ctx.GetStub().GetQueryResult(queryString)
+	if err != nil {
+		return nil, fmt.Errorf("error executing query: %v", err)
+	}
+	defer queryResults.Close()
+
+	for queryResults.HasNext() {
+		value, err := queryResults.Next()
+		if err != nil {
+			return nil, fmt.Errorf("error reading query result: %v", err)
+		}
+
+		var account Account
+		err = json.Unmarshal(value.Value, &account)
+		if err != nil {
+			return nil, fmt.Errorf("error unmarshaling account data: %v", err)
+		}
+
+		result = append(result, account)
+	}
+
+	return result, nil
+}
+
