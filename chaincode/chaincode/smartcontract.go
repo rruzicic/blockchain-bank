@@ -402,6 +402,7 @@ func (s *SmartContract) QueryClientsByFirstName(ctx contractapi.TransactionConte
 	searchQuery := strings.ToLower(firstName)
 	queryString := fmt.Sprintf(`{
 		"selector": {
+			"id": {"$regex": "client.*"},
 			"firstName": {"$regex": "(?i)%s"}
 		}
 	}`, searchQuery)
@@ -435,6 +436,7 @@ func (s *SmartContract) QueryClientsByLastName(ctx contractapi.TransactionContex
 	searchQuery := strings.ToLower(lastName)
 	queryString := fmt.Sprintf(`{
 		"selector": {
+			"id": {"$regex": "client.*"},
 			"lastName": {"$regex": "(?i)%s"}
 		}
 	}`, searchQuery)
@@ -469,6 +471,7 @@ func (s *SmartContract) QueryClientsByLastNameAndEmail(ctx contractapi.Transacti
 	emailQuery := strings.ToLower(email)
 	queryString := fmt.Sprintf(`{
 		"selector": {
+			"id": {"$regex": "client.*"},
 			"lastName": {"$regex": "(?i)%s"},
 			"email": {"$regex": "(?i)%s"}
 		}
@@ -503,6 +506,7 @@ func (s *SmartContract) QueryAccountsByNumber(ctx contractapi.TransactionContext
 	searchQuery := strings.ToLower(accNum)
 	queryString := fmt.Sprintf(`{
 		"selector": {
+			"id": {"$regex": "account.*"},
 			"accNum": {"$regex": "(?i)%s"}
 		}
 	}`, searchQuery)
