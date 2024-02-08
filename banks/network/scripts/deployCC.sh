@@ -133,14 +133,16 @@ packageChaincode() {
 # installChaincode PEER ORG
 installChaincode() {
   ORG=$1
-  setGlobals $ORG
-  set -x
-  peer lifecycle chaincode install ${CC_NAME}.tar.gz >&log.txt
-  res=$?
-  { set +x; } 2>/dev/null
-  cat log.txt
-  verifyResult $res "Chaincode installation on peer0.org${ORG} has failed"
-  successln "Chaincode is installed on peer0.org${ORG}"
+  for (( i=0; i<4; i++ )); do
+    setGlobals $ORG $i
+    set -x
+    peer lifecycle chaincode install ${CC_NAME}.tar.gz >&log.txt
+    res=$?
+    { set +x; } 2>/dev/null
+    cat log.txt
+    verifyResult $res "Chaincode installation on peer${i}.org${ORG} has failed"
+    successln "Chaincode is installed on peer${i}.org${ORG}"
+  done
 }
 
 # queryInstalled PEER ORG
