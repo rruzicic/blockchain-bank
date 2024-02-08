@@ -581,4 +581,47 @@ func (s *SmartContract) QueryGetMiddleClassAccounts(ctx contractapi.TransactionC
 	return result, nil
 }
 
+func (s *SmartContract) QuerySumAllCurrencyGreaterThan(ctx contractapi.TransactionContextInterface, lower float64, currency string) (float64, error){
+	var sum float64
+	queryString := 
+	`{
+		"selector": {
+			"id": {"$regex": "account.*"},
+			"$and": [
+				{
+					"ballance": {
+						"$gte": ` + fmt.Sprintf("%f", lower) +`
+					}
+				},
+				{
+					"currency": {
+						"$eq": "` + currency + `"
+					}
+				}
+			]
+		}
+	}`
 
+	queryResults, err := ctx.GetStub().GetQueryResult(queryString)
+	if err != nil {
+		return -1, fmt.Errorf("error executing query: %v", err)
+	}
+	defer queryResults.Close()
+
+	for queryResults.HasNext() {
+		value, err := queryResults.Next()
+		if err != nil {
+			return -1, fmt.Errorf("error reading query result: %v", err)
+		}
+
+		var account Account
+		err = json.Unmarshal(value.Value, &account)
+		if err != nil {
+			return -1, fmt.Errorf("error unmarshaling account data: %v", err)
+		}
+
+		sum += account.Ballance
+	}
+
+	return sum, nil
+}
