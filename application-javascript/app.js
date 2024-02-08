@@ -15,8 +15,14 @@ const { buildCCPOrg, buildWallet } = require('./util/AppUtil.js');
 const channelName = 'channel1';
 const chaincodeName = 'basic-sample-5';
 const mspOrg1 = 'Org1MSP';
+const mspOrg2 = 'Org2MSP';
+const mspOrg3 = 'Org3MSP';
+const mspOrg4 = 'Org4MSP';
 const walletPath = path.join(__dirname, 'wallet');
 const org1UserId = 'appUser';
+const org2UserId = 'appUser';
+const org3UserId = 'appUser';
+const org4UserId = 'appUser';
 
 function prettyJSONString(inputString) {
 	return JSON.stringify(JSON.parse(inputString), null, 2);
@@ -72,21 +78,36 @@ function prettyJSONString(inputString) {
 async function main() {
 	try {
 		// build an in memory object with the network configuration (also known as a connection profile)
-		const ccp = buildCCPOrg(1);
+		const ccpOrg1 = buildCCPOrg(1);
+		const ccpOrg2 = buildCCPOrg(2);
+		const ccpOrg3 = buildCCPOrg(3);
+		const ccpOrg4 = buildCCPOrg(4);
 
 		// build an instance of the fabric ca services client based on
 		// the information in the network configuration
-		const caClient = buildCAClient(FabricCAServices, ccp, 'ca.org1.example.com');
+		const caClient1 = buildCAClient(FabricCAServices, ccpOrg1, 'ca.org1.example.com');
+		const caClient2 = buildCAClient(FabricCAServices, ccpOrg2, 'ca.org2.example.com');
+		const caClient3 = buildCAClient(FabricCAServices, ccpOrg3, 'ca.org3.example.com');
+		const caClient4 = buildCAClient(FabricCAServices, ccpOrg4, 'ca.org4.example.com');
 
 		// setup the wallet to hold the credentials of the application user
-		const wallet = await buildWallet(Wallets, walletPath);
+		const wallet1 = await buildWallet(Wallets, path.join(walletPath, 'wallet1'));
+		const wallet2 = await buildWallet(Wallets, path.join(walletPath, 'wallet2'));
+		const wallet3 = await buildWallet(Wallets, path.join(walletPath, 'wallet3'));
+		const wallet4 = await buildWallet(Wallets, path.join(walletPath, 'wallet4'));
 
 		// in a real application this would be done on an administrative flow, and only once
-		await enrollAdmin(caClient, wallet, mspOrg1);
+		await enrollAdmin(caClient1, wallet1, mspOrg1);
+		await enrollAdmin(caClient2, wallet2, mspOrg2);
+		await enrollAdmin(caClient3, wallet3, mspOrg3);
+		await enrollAdmin(caClient4, wallet4, mspOrg4);
 
 		// in a real application this would be done only when a new user was required to be added
 		// and would be part of an administrative flow
-		await registerAndEnrollUser(caClient, wallet, mspOrg1, org1UserId, 'org1.department1');
+		await registerAndEnrollUser(caClient1, wallet1, mspOrg1, org1UserId, 'org1.department1');
+		await registerAndEnrollUser(caClient2, wallet2, mspOrg2, org2UserId, 'org2.department1');
+		await registerAndEnrollUser(caClient3, wallet3, mspOrg3, org3UserId, 'org3.department1');
+		await registerAndEnrollUser(caClient3, wallet4, mspOrg4, org4UserId, 'org4.department1');
 
 		// Create a new gateway instance for interacting with the fabric network.
 		// In a real application this would be done as the backend server session is setup for
@@ -207,7 +228,7 @@ function consoleApp() {
 
 }
 
-// main();
-consoleApp()
+main();
+// consoleApp()
 
 
