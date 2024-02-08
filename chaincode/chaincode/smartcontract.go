@@ -3,6 +3,7 @@ package chaincode
 import (
 	"encoding/json"
 	"fmt"
+	"strings"
 
 	"github.com/hyperledger/fabric-contract-api-go/contractapi"
 )
@@ -393,4 +394,139 @@ func (s *SmartContract) TransferMoney(ctx contractapi.TransactionContextInterfac
 	}
 
 	return nil
+}
+
+//======================================================================
+func (s *SmartContract) QueryClientsByFirstName(ctx contractapi.TransactionContextInterface, firstName string) ([]Client, error){
+	var result []Client
+	searchQuery := strings.ToLower(firstName)
+	queryString := fmt.Sprintf(`{
+		"selector": {
+			"firstName": {"$regex": "(?i)%s"}
+		}
+	}`, searchQuery)
+
+	queryResults, err := ctx.GetStub().GetQueryResult(queryString)
+	if err != nil {
+		return nil, fmt.Errorf("error executing query: %v", err)
+	}
+	defer queryResults.Close()
+
+	for queryResults.HasNext() {
+		value, err := queryResults.Next()
+		if err != nil {
+			return nil, fmt.Errorf("error reading query result: %v", err)
+		}
+
+		var client Client
+		err = json.Unmarshal(value.Value, &client)
+		if err != nil {
+			return nil, fmt.Errorf("error unmarshaling client data: %v", err)
+		}
+
+		result = append(result, client)
+	}
+
+	return result, nil
+}
+
+func (s *SmartContract) QueryClientsByLastName(ctx contractapi.TransactionContextInterface, lastName string) ([]Client, error){
+	var result []Client
+	searchQuery := strings.ToLower(lastName)
+	queryString := fmt.Sprintf(`{
+		"selector": {
+			"lastName": {"$regex": "(?i)%s"}
+		}
+	}`, searchQuery)
+
+	queryResults, err := ctx.GetStub().GetQueryResult(queryString)
+	if err != nil {
+		return nil, fmt.Errorf("error executing query: %v", err)
+	}
+	defer queryResults.Close()
+
+	for queryResults.HasNext() {
+		value, err := queryResults.Next()
+		if err != nil {
+			return nil, fmt.Errorf("error reading query result: %v", err)
+		}
+
+		var client Client
+		err = json.Unmarshal(value.Value, &client)
+		if err != nil {
+			return nil, fmt.Errorf("error unmarshaling client data: %v", err)
+		}
+
+		result = append(result, client)
+	}
+
+	return result, nil
+}
+
+func (s *SmartContract) QueryClientsByLastNameAndEmail(ctx contractapi.TransactionContextInterface, lastName string, email string) ([]Client, error){
+	var result []Client
+	lastNameQuery := strings.ToLower(lastName)
+	emailQuery := strings.ToLower(email)
+	queryString := fmt.Sprintf(`{
+		"selector": {
+			"lastName": {"$regex": "(?i)%s"},
+			"email": {"$regex": "(?i)%s"}
+		}
+	}`, lastNameQuery, emailQuery)
+
+	queryResults, err := ctx.GetStub().GetQueryResult(queryString)
+	if err != nil {
+		return nil, fmt.Errorf("error executing query: %v", err)
+	}
+	defer queryResults.Close()
+
+	for queryResults.HasNext() {
+		value, err := queryResults.Next()
+		if err != nil {
+			return nil, fmt.Errorf("error reading query result: %v", err)
+		}
+
+		var client Client
+		err = json.Unmarshal(value.Value, &client)
+		if err != nil {
+			return nil, fmt.Errorf("error unmarshaling client data: %v", err)
+		}
+
+		result = append(result, client)
+	}
+
+	return result, nil
+}
+
+func (s *SmartContract) QueryAccountsByNumber(ctx contractapi.TransactionContextInterface, accNum string) ([]Account, error){
+	var result []Account
+	searchQuery := strings.ToLower(accNum)
+	queryString := fmt.Sprintf(`{
+		"selector": {
+			"accNum": {"$regex": "(?i)%s"}
+		}
+	}`, searchQuery)
+
+	queryResults, err := ctx.GetStub().GetQueryResult(queryString)
+	if err != nil {
+		return nil, fmt.Errorf("error executing query: %v", err)
+	}
+	defer queryResults.Close()
+
+	for queryResults.HasNext() {
+		value, err := queryResults.Next()
+		if err != nil {
+			return nil, fmt.Errorf("error reading query result: %v", err)
+		}
+
+		var account Account
+		err = json.Unmarshal(value.Value, &account)
+		if err != nil {
+			return nil, fmt.Errorf("error unmarshaling account data: %v", err)
+		}
+
+		result = append(result, account)
+	}
+
+	return result, nil
 }
