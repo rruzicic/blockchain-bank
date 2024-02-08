@@ -396,15 +396,16 @@ func (s *SmartContract) TransferMoney(ctx contractapi.TransactionContextInterfac
 	return nil
 }
 
-//======================================================================
-func (s *SmartContract) QueryClientsByFirstName(ctx contractapi.TransactionContextInterface, firstName string) ([]Client, error){
+// ======================================================================
+func (s *SmartContract) QueryClientsByFirstName(ctx contractapi.TransactionContextInterface, firstName string) ([]Client, error) {
 	var result []Client
 	searchQuery := strings.ToLower(firstName)
 	queryString := fmt.Sprintf(`{
-		"selector": {
-			"firstName": {"$regex": "(?i)%s"}
-		}
-	}`, searchQuery)
+        "selector": {
+            "id": {"$regex" : "client.*"},
+            "firstName": {"$regex": "(?i)%s"}
+        }
+    }`, searchQuery)
 
 	queryResults, err := ctx.GetStub().GetQueryResult(queryString)
 	if err != nil {
@@ -430,7 +431,7 @@ func (s *SmartContract) QueryClientsByFirstName(ctx contractapi.TransactionConte
 	return result, nil
 }
 
-func (s *SmartContract) QueryClientsByLastName(ctx contractapi.TransactionContextInterface, lastName string) ([]Client, error){
+func (s *SmartContract) QueryClientsByLastName(ctx contractapi.TransactionContextInterface, lastName string) ([]Client, error) {
 	var result []Client
 	searchQuery := strings.ToLower(lastName)
 	queryString := fmt.Sprintf(`{
@@ -463,7 +464,7 @@ func (s *SmartContract) QueryClientsByLastName(ctx contractapi.TransactionContex
 	return result, nil
 }
 
-func (s *SmartContract) QueryClientsByLastNameAndEmail(ctx contractapi.TransactionContextInterface, lastName string, email string) ([]Client, error){
+func (s *SmartContract) QueryClientsByLastNameAndEmail(ctx contractapi.TransactionContextInterface, lastName string, email string) ([]Client, error) {
 	var result []Client
 	lastNameQuery := strings.ToLower(lastName)
 	emailQuery := strings.ToLower(email)
@@ -498,7 +499,7 @@ func (s *SmartContract) QueryClientsByLastNameAndEmail(ctx contractapi.Transacti
 	return result, nil
 }
 
-func (s *SmartContract) QueryAccountsByNumber(ctx contractapi.TransactionContextInterface, accNum string) ([]Account, error){
+func (s *SmartContract) QueryAccountsByNumber(ctx contractapi.TransactionContextInterface, accNum string) ([]Account, error) {
 	var result []Account
 	searchQuery := strings.ToLower(accNum)
 	queryString := fmt.Sprintf(`{

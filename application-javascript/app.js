@@ -13,9 +13,9 @@ const { buildCAClient, registerAndEnrollUser, enrollAdmin } = require('./util/CA
 const { buildCCPOrg, buildWallet } = require('./util/AppUtil.js');
 
 const channelName = 'channel1';
-const chaincodeName = 'basic';
+const chaincodeName = 'basic-4';
 const walletPath = path.join(__dirname, 'wallets');
-const org1UserId = 'appUser002';
+const org1UserId = 'appUser004';
 
 function prettyJSONString(inputString) {
 	return JSON.stringify(JSON.parse(inputString), null, 2);
@@ -217,7 +217,7 @@ async function addClient(contract) {
 async function readClient(contract) {
 	const prompt = require("prompt-sync")({ sigint: true });
 	const id = prompt('ID: ');
-	console.log('\n--> Evaluate Transaction: ReadAsset, function returns "asset1" attributes');
+	console.log('\n--> Evaluate Transaction: ReadClient');
 	const result = await contract.evaluateTransaction('ReadClient', id);
 	console.log(`*** Result: ${prettyJSONString(result.toString())}`);
 }
@@ -227,6 +227,18 @@ async function initLedger(contract) {
 	await contract.submitTransaction('InitLedger');
 	console.log('*** Result: committed');
 }
+
+async function queryClientsByFirstName(contract) {
+	const prompt = require("prompt-sync")({ sigint: true });
+	const id = prompt('Name: ');
+	console.log('\n--> Evaluate Transaction: QueryClientsByFirstName');
+	const result = await contract.evaluateTransaction('QueryClientsByFirstName', id);
+	console.log(`*** Result: ${result.toString()}`);
+}
+
+async function depositMoney() { }
+async function withdrawMoney() { }
+async function transferMoney() { }
 
 async function consoleApp() {
 	const prompt = require("prompt-sync")({ sigint: true });
@@ -239,6 +251,10 @@ async function consoleApp() {
 		console.log("1 - Init ledger");
 		console.log("2 - Add client");
 		console.log("3 - Read client with ID");
+		console.log("4 - QueryClientsByFirstName");
+		console.log("5 - Deposit money");
+		console.log("6 - Withdraw money");
+		console.log("7 - Transfer money");
 
 		console.log("Press any other key to exit");
 
@@ -249,13 +265,22 @@ async function consoleApp() {
 			await addClient(contract);
 		} else if (option == 3) {
 			await readClient(contract);
-		} else {
+		} else if (option == 4) {
+			await queryClientsByFirstName(contract);
+		} else if (option == 5) {
+			await depositMoney(contract);
+		} else if (option == 6) {
+			await withdrawMoney(contract);
+		} else if (option == 7) {
+			await transferMoney(contract);
+		}
+		else {
 			break;
 		}
-
 	}
 
 }
+
 
 // main();
 consoleApp()
