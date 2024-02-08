@@ -13,9 +13,9 @@ const { buildCAClient, registerAndEnrollUser, enrollAdmin } = require('./util/CA
 const { buildCCPOrg, buildWallet } = require('./util/AppUtil.js');
 
 const channelName = 'channel1';
-const chaincodeName = 'basic-5';
+const chaincodeName = 'basic-6';
 const walletPath = path.join(__dirname, 'wallets');
-const org1UserId = 'appUser004';
+const org1UserId = 'appUser040';
 
 function prettyJSONString(inputString) {
 	return JSON.stringify(JSON.parse(inputString), null, 2);
@@ -243,6 +243,12 @@ async function queryGetMiddleClassAccounts(contract) {
 	console.log(`*** Result: ${result.toString()}`);
 }
 
+async function querySumAllCurrencyGreaterThan(contract) {
+	console.log('\n--> Evaluate Transaction: QuerySumAllCurrencyGreaterThan');
+	const result = await contract.evaluateTransaction('QuerySumAllCurrencyGreaterThan', 1200, "EUR");
+	console.log(`*** Result: ${result.toString()}`);
+}
+
 async function depositMoney(contract) {
 	const prompt = require("prompt-sync")({ sigint: true });
 	const id = prompt('ID: ');
@@ -312,6 +318,7 @@ async function consoleApp() {
 		console.log("7 - Transfer money");
 		console.log("8 - Read account");
 		console.log("9 - QueryGetMiddleClassAccounts");
+		console.log("10 - QuerySumAllCurrencyGreaterThan");
 
 		console.log("Press any other key to exit");
 
@@ -334,6 +341,8 @@ async function consoleApp() {
 			await readAccount(contract);
 		} else if (option == 9) {
 			await queryGetMiddleClassAccounts(contract);
+		} else if (option == 10) {
+			await querySumAllCurrencyGreaterThan(contract);
 		}
 		else {
 			break;
