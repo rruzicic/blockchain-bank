@@ -10,7 +10,7 @@ const { Gateway, Wallets } = require('fabric-network');
 const FabricCAServices = require('fabric-ca-client');
 const path = require('path');
 const { buildCAClient, registerAndEnrollUser, enrollAdmin } = require('./util/CAUtil.js');
-const { buildCCPOrg1, buildWallet } = require('./util/AppUtil.js');
+const { buildCCPOrg, buildWallet } = require('./util/AppUtil.js');
 
 const channelName = 'channel1';
 const chaincodeName = 'basic-sample-5';
@@ -72,7 +72,7 @@ function prettyJSONString(inputString) {
 async function main() {
 	try {
 		// build an in memory object with the network configuration (also known as a connection profile)
-		const ccp = buildCCPOrg1();
+		const ccp = buildCCPOrg(1);
 
 		// build an instance of the fabric ca services client based on
 		// the information in the network configuration
@@ -177,4 +177,20 @@ async function main() {
 	}
 }
 
+// function consoleApp() {
+// 	let option;
+// 	do {
+// 		console.log("Choose an option:");
+// 		console.log("1 - Enroll user");
+// 		console.log("2 - Query the chaincode");
+// 		console.log("3 - Invoke the chaincode");
+// 		option = prompt("asdasd");
+// 		// option = prompt();
+
+// 	} while (option <= 3)
+// }
+
 main();
+// consoleApp()
+
+
