@@ -13,7 +13,7 @@ const { buildCAClient, registerAndEnrollUser, enrollAdmin } = require('./util/CA
 const { buildCCPOrg, buildWallet } = require('./util/AppUtil.js');
 
 const channelName = 'channel1';
-const chaincodeName = 'basic-4';
+const chaincodeName = 'basic-5';
 const walletPath = path.join(__dirname, 'wallets');
 const org1UserId = 'appUser004';
 
@@ -236,6 +236,13 @@ async function queryClientsByFirstName(contract) {
 	console.log(`*** Result: ${result.toString()}`);
 }
 
+async function queryGetMiddleClassAccounts(contract) {
+
+	console.log('\n--> Evaluate Transaction: QueryGetMiddleClassAccounts');
+	const result = await contract.evaluateTransaction('QueryGetMiddleClassAccounts', 100, 900);
+	console.log(`*** Result: ${result.toString()}`);
+}
+
 async function depositMoney(contract) {
 	const prompt = require("prompt-sync")({ sigint: true });
 	const id = prompt('ID: ');
@@ -244,7 +251,7 @@ async function depositMoney(contract) {
 	try {
 		// How about we try a transactions where the executing chaincode throws an error
 		// Notice how the submitTransaction will throw an error containing the error thrown by the chaincode
-		console.log('\n--> Submit Transaction: CreateClient');
+		console.log('\n--> Submit Transaction: DepositMoney');
 		await contract.submitTransaction('DepositMoney', id, amount);
 		console.log('******** SUCCESS: deposited money');
 
@@ -261,7 +268,7 @@ async function withdrawMoney(contract) {
 	try {
 		// How about we try a transactions where the executing chaincode throws an error
 		// Notice how the submitTransaction will throw an error containing the error thrown by the chaincode
-		console.log('\n--> Submit Transaction: CreateClient');
+		console.log('\n--> Submit Transaction: WithdrawMoney');
 		await contract.submitTransaction('WithdrawMoney', id, amount);
 		console.log('******** SUCCESS: withdrawed money');
 
@@ -304,6 +311,7 @@ async function consoleApp() {
 		console.log("6 - Withdraw money");
 		console.log("7 - Transfer money");
 		console.log("8 - Read account");
+		console.log("9 - QueryGetMiddleClassAccounts");
 
 		console.log("Press any other key to exit");
 
@@ -324,6 +332,8 @@ async function consoleApp() {
 			await transferMoney(contract);
 		} else if (option == 8) {
 			await readAccount(contract);
+		} else if (option == 9) {
+			await queryGetMiddleClassAccounts(contract);
 		}
 		else {
 			break;
