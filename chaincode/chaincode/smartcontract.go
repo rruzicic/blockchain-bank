@@ -497,3 +497,36 @@ func (s *SmartContract) QueryClientsByLastNameAndEmail(ctx contractapi.Transacti
 
 	return result, nil
 }
+
+func (s *SmartContract) QueryAccountsByNumber(ctx contractapi.TransactionContextInterface, accNum string) ([]Account, error){
+	var result []Account
+	searchQuery := strings.ToLower(accNum)
+	queryString := fmt.Sprintf(`{
+		"selector": {
+			"accNum": {"$regex": "(?i)%s"}
+		}
+	}`, searchQuery)
+
+	queryResults, err := ctx.GetStub().GetQueryResult(queryString)
+	if err != nil {
+		return nil, fmt.Errorf("error executing query: %v", err)
+	}
+	defer queryResults.Close()
+
+	for queryResults.HasNext() {
+		value, err := queryResults.Next()
+		if err != nil {
+			return nil, fmt.Errorf("error reading query result: %v", err)
+		}
+
+		var account Account
+		err = json.Unmarshal(value.Value, &account)
+		if err != nil {
+			return nil, fmt.Errorf("error unmarshaling account data: %v", err)
+		}
+
+		result = append(result, account)
+	}
+
+	return result, nil
+}
