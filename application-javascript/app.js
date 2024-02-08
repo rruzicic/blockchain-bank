@@ -177,20 +177,37 @@ async function main() {
 	}
 }
 
-// function consoleApp() {
-// 	let option;
-// 	do {
-// 		console.log("Choose an option:");
-// 		console.log("1 - Enroll user");
-// 		console.log("2 - Query the chaincode");
-// 		console.log("3 - Invoke the chaincode");
-// 		option = prompt("asdasd");
-// 		// option = prompt();
+function enrollUser() { }
 
-// 	} while (option <= 3)
-// }
+function queryChaincode() { }
 
-main();
-// consoleApp()
+function invokeChaincode() { }
+
+function consoleApp() {
+	while (true) {
+		console.log("Choose an option:");
+		console.log("1 - Enroll user");
+		console.log("2 - Query the chaincode");
+		console.log("3 - Invoke the chaincode");
+		console.log("Press any other key to exit");
+
+		const prompt = require("prompt-sync")({ sigint: true });
+		const option = prompt("> ");
+		if (option == 1) {
+			enrollUser();
+		} else if (option == 2) {
+			queryChaincode();
+		} else if (option == 3) {
+			invokeChaincode();
+		} else {
+			break;
+		}
+
+	}
+
+}
+
+// main();
+consoleApp()
 
 
