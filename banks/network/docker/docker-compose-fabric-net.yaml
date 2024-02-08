@@ -8,21 +8,21 @@ volumes:
   orderer1.example.com:
   orderer2.example.com:
   peer0.org1.example.com:
-  # peer1.org1.example.com:
-  # peer2.org1.example.com:
-  # peer3.org1.example.com:
+  peer1.org1.example.com:
+  peer2.org1.example.com:
+  peer3.org1.example.com:
   peer0.org2.example.com:
-  # peer1.org2.example.com:
-  # peer2.org2.example.com:
-  # peer3.org2.example.com:
+  peer1.org2.example.com:
+  peer2.org2.example.com:
+  peer3.org2.example.com:
   peer0.org3.example.com:
-  # peer1.org3.example.com:
-  # peer2.org3.example.com:
-  # peer3.org3.example.com:
+  peer1.org3.example.com:
+  peer2.org3.example.com:
+  peer3.org3.example.com:
   peer0.org4.example.com:
-  # peer1.org4.example.com:
-  # peer2.org4.example.com:
-  # peer3.org4.example.com:
+  peer1.org4.example.com:
+  peer2.org4.example.com:
+  peer3.org4.example.com:
 
 networks:
   fabric_net:
@@ -69,7 +69,7 @@ services:
       file: docker-service-extend.yaml
       service: peer-extend
     environment:
-      # Peer specific variabes for org1
+      #  Peer specific variabes for org1
       - CORE_PEER_ID=peer0.org1.example.com
       - CORE_PEER_ADDRESS=peer0.org1.example.com:1001
       - CORE_PEER_LISTENADDRESS=0.0.0.0:1001
@@ -87,77 +87,77 @@ services:
       - 1001:1001
       - 1011:1011
 
-  # peer1.org1.example.com:
-  #   container_name: peer1.org1.example.com
-  #   extends:
-  #     file: docker-service-extend.yaml
-  #     service: peer-extend
-  #   environment:
-  #     # Peer specific variabes for org1
-  #     - CORE_PEER_ID=peer1.org1.example.com
-  #     - CORE_PEER_ADDRESS=peer1.org1.example.com:1002
-  #     - CORE_PEER_LISTENADDRESS=0.0.0.0:1002
-  #     - CORE_PEER_CHAINCODEADDRESS=peer1.org1.example.com:1102
-  #     - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:1102
-  #     - CORE_PEER_GOSSIP_BOOTSTRAP=peer1.org1.example.com:1002
-  #     - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.org1.example.com:1002
-  #     - CORE_PEER_LOCALMSPID=Org1MSP
-  #     - CORE_OPERATIONS_LISTENADDRESS=peer1.org1.example.com:1012
-  #   volumes:
-  #     - ../organizations/peerOrganizations/org1.example.com/peers/peer1.org1.example.com/msp:/etc/hyperledger/fabric/msp
-  #     - ../organizations/peerOrganizations/org1.example.com/peers/peer1.org1.example.com/tls:/etc/hyperledger/fabric/tls
-  #     - peer1.org1.example.com:/var/hyperledger/production
-  #   ports:
-  #     - 1002:1002
-  #     - 1012:1012
+  peer1.org1.example.com:
+    container_name: peer1.org1.example.com
+    extends:
+      file: docker-service-extend.yaml
+      service: peer-extend
+    environment:
+      #  Peer specific variabes for org1
+      - CORE_PEER_ID=peer1.org1.example.com
+      - CORE_PEER_ADDRESS=peer1.org1.example.com:1002
+      - CORE_PEER_LISTENADDRESS=0.0.0.0:1002
+      - CORE_PEER_CHAINCODEADDRESS=peer1.org1.example.com:1102
+      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:1102
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer1.org1.example.com:1002
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.org1.example.com:1002
+      - CORE_PEER_LOCALMSPID=Org1MSP
+      - CORE_OPERATIONS_LISTENADDRESS=peer1.org1.example.com:1012
+    volumes:
+      - ../organizations/peerOrganizations/org1.example.com/peers/peer1.org1.example.com/msp:/etc/hyperledger/fabric/msp
+      - ../organizations/peerOrganizations/org1.example.com/peers/peer1.org1.example.com/tls:/etc/hyperledger/fabric/tls
+      - peer1.org1.example.com:/var/hyperledger/production
+    ports:
+      - 1002:1002
+      - 1012:1012
 
-  # peer2.org1.example.com:
-  #   container_name: peer2.org1.example.com
-  #   extends:
-  #     file: docker-service-extend.yaml
-  #     service: peer-extend
-  #   environment:
-  #     # Peer specific variabes for org1
-  #     - CORE_PEER_ID=peer2.org1.example.com
-  #     - CORE_PEER_ADDRESS=peer2.org1.example.com:1003
-  #     - CORE_PEER_LISTENADDRESS=0.0.0.0:1003
-  #     - CORE_PEER_CHAINCODEADDRESS=peer2.org1.example.com:1103
-  #     - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:1103
-  #     - CORE_PEER_GOSSIP_BOOTSTRAP=peer2.org1.example.com:1003
-  #     - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer2.org1.example.com:1003
-  #     - CORE_PEER_LOCALMSPID=Org1MSP
-  #     - CORE_OPERATIONS_LISTENADDRESS=peer2.org1.example.com:1013
-  #   volumes:
-  #     - ../organizations/peerOrganizations/org1.example.com/peers/peer2.org1.example.com/msp:/etc/hyperledger/fabric/msp
-  #     - ../organizations/peerOrganizations/org1.example.com/peers/peer2.org1.example.com/tls:/etc/hyperledger/fabric/tls
-  #     - peer2.org1.example.com:/var/hyperledger/production
-  #   ports:
-  #     - 1003:1003
-  #     - 1013:1013
+  peer2.org1.example.com:
+    container_name: peer2.org1.example.com
+    extends:
+      file: docker-service-extend.yaml
+      service: peer-extend
+    environment:
+      #  Peer specific variabes for org1
+      - CORE_PEER_ID=peer2.org1.example.com
+      - CORE_PEER_ADDRESS=peer2.org1.example.com:1003
+      - CORE_PEER_LISTENADDRESS=0.0.0.0:1003
+      - CORE_PEER_CHAINCODEADDRESS=peer2.org1.example.com:1103
+      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:1103
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer2.org1.example.com:1003
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer2.org1.example.com:1003
+      - CORE_PEER_LOCALMSPID=Org1MSP
+      - CORE_OPERATIONS_LISTENADDRESS=peer2.org1.example.com:1013
+    volumes:
+      - ../organizations/peerOrganizations/org1.example.com/peers/peer2.org1.example.com/msp:/etc/hyperledger/fabric/msp
+      - ../organizations/peerOrganizations/org1.example.com/peers/peer2.org1.example.com/tls:/etc/hyperledger/fabric/tls
+      - peer2.org1.example.com:/var/hyperledger/production
+    ports:
+      - 1003:1003
+      - 1013:1013
 
-  # peer3.org1.example.com:
-  #   container_name: peer3.org1.example.com
-  #   extends:
-  #     file: docker-service-extend.yaml
-  #     service: peer-extend
-  #   environment:
-  #     # Peer specific variabes for org1
-  #     - CORE_PEER_ID=peer3.org1.example.com
-  #     - CORE_PEER_ADDRESS=peer3.org1.example.com:1004
-  #     - CORE_PEER_LISTENADDRESS=0.0.0.0:1004
-  #     - CORE_PEER_CHAINCODEADDRESS=peer3.org1.example.com:1104
-  #     - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:1104
-  #     - CORE_PEER_GOSSIP_BOOTSTRAP=peer3.org1.example.com:1004
-  #     - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer3.org1.example.com:1004
-  #     - CORE_PEER_LOCALMSPID=Org1MSP
-  #     - CORE_OPERATIONS_LISTENADDRESS=peer3.org1.example.com:1014
-  #   volumes:
-  #     - ../organizations/peerOrganizations/org1.example.com/peers/peer3.org1.example.com/msp:/etc/hyperledger/fabric/msp
-  #     - ../organizations/peerOrganizations/org1.example.com/peers/peer3.org1.example.com/tls:/etc/hyperledger/fabric/tls
-  #     - peer3.org1.example.com:/var/hyperledger/production
-  #   ports:
-  #     - 1004:1004
-  #     - 1014:1014
+  peer3.org1.example.com:
+    container_name: peer3.org1.example.com
+    extends:
+      file: docker-service-extend.yaml
+      service: peer-extend
+    environment:
+      #  Peer specific variabes for org1
+      - CORE_PEER_ID=peer3.org1.example.com
+      - CORE_PEER_ADDRESS=peer3.org1.example.com:1004
+      - CORE_PEER_LISTENADDRESS=0.0.0.0:1004
+      - CORE_PEER_CHAINCODEADDRESS=peer3.org1.example.com:1104
+      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:1104
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer3.org1.example.com:1004
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer3.org1.example.com:1004
+      - CORE_PEER_LOCALMSPID=Org1MSP
+      - CORE_OPERATIONS_LISTENADDRESS=peer3.org1.example.com:1014
+    volumes:
+      - ../organizations/peerOrganizations/org1.example.com/peers/peer3.org1.example.com/msp:/etc/hyperledger/fabric/msp
+      - ../organizations/peerOrganizations/org1.example.com/peers/peer3.org1.example.com/tls:/etc/hyperledger/fabric/tls
+      - peer3.org1.example.com:/var/hyperledger/production
+    ports:
+      - 1004:1004
+      - 1014:1014
 
   peer0.org2.example.com:
     container_name: peer0.org2.example.com
@@ -183,77 +183,77 @@ services:
       - 2001:2001
       - 2011:2011
 
-  # peer1.org2.example.com:
-  #   container_name: peer1.org2.example.com
-  #   extends:
-  #     file: docker-service-extend.yaml
-  #     service: peer-extend
-  #   environment:
-  #     # Peer specific variabes for org2
-  #     - CORE_PEER_ID=peer1.org2.example.com
-  #     - CORE_PEER_ADDRESS=peer1.org2.example.com:2002
-  #     - CORE_PEER_LISTENADDRESS=0.0.0.0:2002
-  #     - CORE_PEER_CHAINCODEADDRESS=peer1.org2.example.com:2102
-  #     - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:2102
-  #     - CORE_PEER_GOSSIP_BOOTSTRAP=peer1.org2.example.com:2002
-  #     - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.org2.example.com:2002
-  #     - CORE_PEER_LOCALMSPID=Org2MSP
-  #     - CORE_OPERATIONS_LISTENADDRESS=peer1.org2.example.com:2012
-  #   volumes:
-  #     - ../organizations/peerOrganizations/org2.example.com/peers/peer1.org2.example.com/msp:/etc/hyperledger/fabric/msp
-  #     - ../organizations/peerOrganizations/org2.example.com/peers/peer1.org2.example.com/tls:/etc/hyperledger/fabric/tls
-  #     - peer1.org2.example.com:/var/hyperledger/production
-  #   ports:
-  #     - 2002:2002
-  #     - 2012:2012
+  peer1.org2.example.com:
+    container_name: peer1.org2.example.com
+    extends:
+      file: docker-service-extend.yaml
+      service: peer-extend
+    environment:
+      # Peer specific variabes for org2
+      - CORE_PEER_ID=peer1.org2.example.com
+      - CORE_PEER_ADDRESS=peer1.org2.example.com:2002
+      - CORE_PEER_LISTENADDRESS=0.0.0.0:2002
+      - CORE_PEER_CHAINCODEADDRESS=peer1.org2.example.com:2102
+      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:2102
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer1.org2.example.com:2002
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.org2.example.com:2002
+      - CORE_PEER_LOCALMSPID=Org2MSP
+      - CORE_OPERATIONS_LISTENADDRESS=peer1.org2.example.com:2012
+    volumes:
+      - ../organizations/peerOrganizations/org2.example.com/peers/peer1.org2.example.com/msp:/etc/hyperledger/fabric/msp
+      - ../organizations/peerOrganizations/org2.example.com/peers/peer1.org2.example.com/tls:/etc/hyperledger/fabric/tls
+      - peer1.org2.example.com:/var/hyperledger/production
+    ports:
+      - 2002:2002
+      - 2012:2012
 
-  # peer2.org2.example.com:
-  #   container_name: peer2.org2.example.com
-  #   extends:
-  #     file: docker-service-extend.yaml
-  #     service: peer-extend
-  #   environment:
-  #     # Peer specific variabes for org2
-  #     - CORE_PEER_ID=peer2.org2.example.com
-  #     - CORE_PEER_ADDRESS=peer2.org2.example.com:2003
-  #     - CORE_PEER_LISTENADDRESS=0.0.0.0:2003
-  #     - CORE_PEER_CHAINCODEADDRESS=peer2.org2.example.com:2103
-  #     - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:2103
-  #     - CORE_PEER_GOSSIP_BOOTSTRAP=peer2.org2.example.com:2003
-  #     - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer2.org2.example.com:2003
-  #     - CORE_PEER_LOCALMSPID=Org2MSP
-  #     - CORE_OPERATIONS_LISTENADDRESS=peer2.org2.example.com:2013
-  #   volumes:
-  #     - ../organizations/peerOrganizations/org2.example.com/peers/peer2.org2.example.com/msp:/etc/hyperledger/fabric/msp
-  #     - ../organizations/peerOrganizations/org2.example.com/peers/peer2.org2.example.com/tls:/etc/hyperledger/fabric/tls
-  #     - peer2.org2.example.com:/var/hyperledger/production
-  #   ports:
-  #     - 2003:2003
-  #     - 2013:2013
+  peer2.org2.example.com:
+    container_name: peer2.org2.example.com
+    extends:
+      file: docker-service-extend.yaml
+      service: peer-extend
+    environment:
+      # Peer specific variabes for org2
+      - CORE_PEER_ID=peer2.org2.example.com
+      - CORE_PEER_ADDRESS=peer2.org2.example.com:2003
+      - CORE_PEER_LISTENADDRESS=0.0.0.0:2003
+      - CORE_PEER_CHAINCODEADDRESS=peer2.org2.example.com:2103
+      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:2103
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer2.org2.example.com:2003
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer2.org2.example.com:2003
+      - CORE_PEER_LOCALMSPID=Org2MSP
+      - CORE_OPERATIONS_LISTENADDRESS=peer2.org2.example.com:2013
+    volumes:
+      - ../organizations/peerOrganizations/org2.example.com/peers/peer2.org2.example.com/msp:/etc/hyperledger/fabric/msp
+      - ../organizations/peerOrganizations/org2.example.com/peers/peer2.org2.example.com/tls:/etc/hyperledger/fabric/tls
+      - peer2.org2.example.com:/var/hyperledger/production
+    ports:
+      - 2003:2003
+      - 2013:2013
 
-  # peer3.org2.example.com:
-  #   container_name: peer3.org2.example.com
-  #   extends:
-  #     file: docker-service-extend.yaml
-  #     service: peer-extend
-  #   environment:
-  #     # Peer specific variabes for org2
-  #     - CORE_PEER_ID=peer3.org2.example.com
-  #     - CORE_PEER_ADDRESS=peer3.org2.example.com:2004
-  #     - CORE_PEER_LISTENADDRESS=0.0.0.0:2004
-  #     - CORE_PEER_CHAINCODEADDRESS=peer3.org2.example.com:2104
-  #     - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:2104
-  #     - CORE_PEER_GOSSIP_BOOTSTRAP=peer3.org2.example.com:2004
-  #     - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer3.org2.example.com:2004
-  #     - CORE_PEER_LOCALMSPID=Org2MSP
-  #     - CORE_OPERATIONS_LISTENADDRESS=peer3.org2.example.com:2014
-  #   volumes:
-  #     - ../organizations/peerOrganizations/org2.example.com/peers/peer3.org2.example.com/msp:/etc/hyperledger/fabric/msp
-  #     - ../organizations/peerOrganizations/org2.example.com/peers/peer3.org2.example.com/tls:/etc/hyperledger/fabric/tls
-  #     - peer3.org2.example.com:/var/hyperledger/production
-  #   ports:
-  #     - 2004:2004
-  #     - 2014:2014
+  peer3.org2.example.com:
+    container_name: peer3.org2.example.com
+    extends:
+      file: docker-service-extend.yaml
+      service: peer-extend
+    environment:
+      # Peer specific variabes for org2
+      - CORE_PEER_ID=peer3.org2.example.com
+      - CORE_PEER_ADDRESS=peer3.org2.example.com:2004
+      - CORE_PEER_LISTENADDRESS=0.0.0.0:2004
+      - CORE_PEER_CHAINCODEADDRESS=peer3.org2.example.com:2104
+      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:2104
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer3.org2.example.com:2004
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer3.org2.example.com:2004
+      - CORE_PEER_LOCALMSPID=Org2MSP
+      - CORE_OPERATIONS_LISTENADDRESS=peer3.org2.example.com:2014
+    volumes:
+      - ../organizations/peerOrganizations/org2.example.com/peers/peer3.org2.example.com/msp:/etc/hyperledger/fabric/msp
+      - ../organizations/peerOrganizations/org2.example.com/peers/peer3.org2.example.com/tls:/etc/hyperledger/fabric/tls
+      - peer3.org2.example.com:/var/hyperledger/production
+    ports:
+      - 2004:2004
+      - 2014:2014
 
   peer0.org3.example.com:
     container_name: peer0.org3.example.com
@@ -279,77 +279,77 @@ services:
       - 3001:3001
       - 3011:3011
 
-  # peer1.org3.example.com:
-  #   container_name: peer1.org3.example.com
-  #   extends:
-  #     file: docker-service-extend.yaml
-  #     service: peer-extend
-  #   environment:
-  #     # Peer-specific variables for org3
-  #     - CORE_PEER_ID=peer1.org3.example.com
-  #     - CORE_PEER_ADDRESS=peer1.org3.example.com:3002
-  #     - CORE_PEER_LISTENADDRESS=0.0.0.0:3002
-  #     - CORE_PEER_CHAINCODEADDRESS=peer1.org3.example.com:3102
-  #     - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:3102
-  #     - CORE_PEER_GOSSIP_BOOTSTRAP=peer1.org3.example.com:3002
-  #     - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.org3.example.com:3002
-  #     - CORE_PEER_LOCALMSPID=Org3MSP
-  #     - CORE_OPERATIONS_LISTENADDRESS=peer1.org3.example.com:3012
-  #   volumes:
-  #     - ../organizations/peerOrganizations/org3.example.com/peers/peer1.org3.example.com/msp:/etc/hyperledger/fabric/msp
-  #     - ../organizations/peerOrganizations/org3.example.com/peers/peer1.org3.example.com/tls:/etc/hyperledger/fabric/tls
-  #     - peer1.org3.example.com:/var/hyperledger/production
-  #   ports:
-  #     - 3002:3002
-  #     - 3012:3012
+  peer1.org3.example.com:
+    container_name: peer1.org3.example.com
+    extends:
+      file: docker-service-extend.yaml
+      service: peer-extend
+    environment:
+      # Peer-specific variables for org3
+      - CORE_PEER_ID=peer1.org3.example.com
+      - CORE_PEER_ADDRESS=peer1.org3.example.com:3002
+      - CORE_PEER_LISTENADDRESS=0.0.0.0:3002
+      - CORE_PEER_CHAINCODEADDRESS=peer1.org3.example.com:3102
+      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:3102
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer1.org3.example.com:3002
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.org3.example.com:3002
+      - CORE_PEER_LOCALMSPID=Org3MSP
+      - CORE_OPERATIONS_LISTENADDRESS=peer1.org3.example.com:3012
+    volumes:
+      - ../organizations/peerOrganizations/org3.example.com/peers/peer1.org3.example.com/msp:/etc/hyperledger/fabric/msp
+      - ../organizations/peerOrganizations/org3.example.com/peers/peer1.org3.example.com/tls:/etc/hyperledger/fabric/tls
+      - peer1.org3.example.com:/var/hyperledger/production
+    ports:
+      - 3002:3002
+      - 3012:3012
 
-  # peer2.org3.example.com:
-  #   container_name: peer2.org3.example.com
-  #   extends:
-  #     file: docker-service-extend.yaml
-  #     service: peer-extend
-  #   environment:
-  #     # Peer-specific variables for org3
-  #     - CORE_PEER_ID=peer2.org3.example.com
-  #     - CORE_PEER_ADDRESS=peer2.org3.example.com:3003
-  #     - CORE_PEER_LISTENADDRESS=0.0.0.0:3003
-  #     - CORE_PEER_CHAINCODEADDRESS=peer2.org3.example.com:3103
-  #     - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:3103
-  #     - CORE_PEER_GOSSIP_BOOTSTRAP=peer2.org3.example.com:3003
-  #     - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer2.org3.example.com:3003
-  #     - CORE_PEER_LOCALMSPID=Org3MSP
-  #     - CORE_OPERATIONS_LISTENADDRESS=peer2.org3.example.com:3013
-  #   volumes:
-  #     - ../organizations/peerOrganizations/org3.example.com/peers/peer2.org3.example.com/msp:/etc/hyperledger/fabric/msp
-  #     - ../organizations/peerOrganizations/org3.example.com/peers/peer2.org3.example.com/tls:/etc/hyperledger/fabric/tls
-  #     - peer2.org3.example.com:/var/hyperledger/production
-  #   ports:
-  #     - 3003:3003
-  #     - 3013:3013
+  peer2.org3.example.com:
+    container_name: peer2.org3.example.com
+    extends:
+      file: docker-service-extend.yaml
+      service: peer-extend
+    environment:
+      # Peer-specific variables for org3
+      - CORE_PEER_ID=peer2.org3.example.com
+      - CORE_PEER_ADDRESS=peer2.org3.example.com:3003
+      - CORE_PEER_LISTENADDRESS=0.0.0.0:3003
+      - CORE_PEER_CHAINCODEADDRESS=peer2.org3.example.com:3103
+      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:3103
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer2.org3.example.com:3003
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer2.org3.example.com:3003
+      - CORE_PEER_LOCALMSPID=Org3MSP
+      - CORE_OPERATIONS_LISTENADDRESS=peer2.org3.example.com:3013
+    volumes:
+      - ../organizations/peerOrganizations/org3.example.com/peers/peer2.org3.example.com/msp:/etc/hyperledger/fabric/msp
+      - ../organizations/peerOrganizations/org3.example.com/peers/peer2.org3.example.com/tls:/etc/hyperledger/fabric/tls
+      - peer2.org3.example.com:/var/hyperledger/production
+    ports:
+      - 3003:3003
+      - 3013:3013
 
-  # peer3.org3.example.com:
-  #   container_name: peer3.org3.example.com
-  #   extends:
-  #     file: docker-service-extend.yaml
-  #     service: peer-extend
-  #   environment:
-  #     # Peer-specific variables for org3
-  #     - CORE_PEER_ID=peer3.org3.example.com
-  #     - CORE_PEER_ADDRESS=peer3.org3.example.com:3004
-  #     - CORE_PEER_LISTENADDRESS=0.0.0.0:3004
-  #     - CORE_PEER_CHAINCODEADDRESS=peer3.org3.example.com:3104
-  #     - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:3104
-  #     - CORE_PEER_GOSSIP_BOOTSTRAP=peer3.org3.example.com:3004
-  #     - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer3.org3.example.com:3004
-  #     - CORE_PEER_LOCALMSPID=Org3MSP
-  #     - CORE_OPERATIONS_LISTENADDRESS=peer3.org3.example.com:3014
-  #   volumes:
-  #     - ../organizations/peerOrganizations/org3.example.com/peers/peer3.org3.example.com/msp:/etc/hyperledger/fabric/msp
-  #     - ../organizations/peerOrganizations/org3.example.com/peers/peer3.org3.example.com/tls:/etc/hyperledger/fabric/tls
-  #     - peer3.org3.example.com:/var/hyperledger/production
-  #   ports:
-  #     - 3004:3004
-  #     - 3014:3014
+  peer3.org3.example.com:
+    container_name: peer3.org3.example.com
+    extends:
+      file: docker-service-extend.yaml
+      service: peer-extend
+    environment:
+      # Peer-specific variables for org3
+      - CORE_PEER_ID=peer3.org3.example.com
+      - CORE_PEER_ADDRESS=peer3.org3.example.com:3004
+      - CORE_PEER_LISTENADDRESS=0.0.0.0:3004
+      - CORE_PEER_CHAINCODEADDRESS=peer3.org3.example.com:3104
+      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:3104
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer3.org3.example.com:3004
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer3.org3.example.com:3004
+      - CORE_PEER_LOCALMSPID=Org3MSP
+      - CORE_OPERATIONS_LISTENADDRESS=peer3.org3.example.com:3014
+    volumes:
+      - ../organizations/peerOrganizations/org3.example.com/peers/peer3.org3.example.com/msp:/etc/hyperledger/fabric/msp
+      - ../organizations/peerOrganizations/org3.example.com/peers/peer3.org3.example.com/tls:/etc/hyperledger/fabric/tls
+      - peer3.org3.example.com:/var/hyperledger/production
+    ports:
+      - 3004:3004
+      - 3014:3014
 
   peer0.org4.example.com:
     container_name: peer0.org4.example.com
@@ -375,77 +375,77 @@ services:
       - 4001:4001
       - 4011:4011
 
-  # peer1.org4.example.com:
-  #   container_name: peer1.org4.example.com
-  #   extends:
-  #     file: docker-service-extend.yaml
-  #     service: peer-extend
-  #   environment:
-  #     # Peer-specific variables for org4
-  #     - CORE_PEER_ID=peer1.org4.example.com
-  #     - CORE_PEER_ADDRESS=peer1.org4.example.com:4002
-  #     - CORE_PEER_LISTENADDRESS=0.0.0.0:4002
-  #     - CORE_PEER_CHAINCODEADDRESS=peer1.org4.example.com:4102
-  #     - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:4102
-  #     - CORE_PEER_GOSSIP_BOOTSTRAP=peer1.org4.example.com:4002
-  #     - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.org4.example.com:4002
-  #     - CORE_PEER_LOCALMSPID=Org4MSP
-  #     - CORE_OPERATIONS_LISTENADDRESS=peer1.org4.example.com:4012
-  #   volumes:
-  #     - ../organizations/peerOrganizations/org4.example.com/peers/peer1.org4.example.com/msp:/etc/hyperledger/fabric/msp
-  #     - ../organizations/peerOrganizations/org4.example.com/peers/peer1.org4.example.com/tls:/etc/hyperledger/fabric/tls
-  #     - peer1.org4.example.com:/var/hyperledger/production
-  #   ports:
-  #     - 4002:4002
-  #     - 4012:4012
+  peer1.org4.example.com:
+    container_name: peer1.org4.example.com
+    extends:
+      file: docker-service-extend.yaml
+      service: peer-extend
+    environment:
+      # Peer-specific variables for org4
+      - CORE_PEER_ID=peer1.org4.example.com
+      - CORE_PEER_ADDRESS=peer1.org4.example.com:4002
+      - CORE_PEER_LISTENADDRESS=0.0.0.0:4002
+      - CORE_PEER_CHAINCODEADDRESS=peer1.org4.example.com:4102
+      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:4102
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer1.org4.example.com:4002
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.org4.example.com:4002
+      - CORE_PEER_LOCALMSPID=Org4MSP
+      - CORE_OPERATIONS_LISTENADDRESS=peer1.org4.example.com:4012
+    volumes:
+      - ../organizations/peerOrganizations/org4.example.com/peers/peer1.org4.example.com/msp:/etc/hyperledger/fabric/msp
+      - ../organizations/peerOrganizations/org4.example.com/peers/peer1.org4.example.com/tls:/etc/hyperledger/fabric/tls
+      - peer1.org4.example.com:/var/hyperledger/production
+    ports:
+      - 4002:4002
+      - 4012:4012
 
-  # peer2.org4.example.com:
-  #   container_name: peer2.org4.example.com
-  #   extends:
-  #     file: docker-service-extend.yaml
-  #     service: peer-extend
-  #   environment:
-  #     # Peer-specific variables for org4
-  #     - CORE_PEER_ID=peer2.org4.example.com
-  #     - CORE_PEER_ADDRESS=peer2.org4.example.com:4003
-  #     - CORE_PEER_LISTENADDRESS=0.0.0.0:4003
-  #     - CORE_PEER_CHAINCODEADDRESS=peer2.org4.example.com:4103
-  #     - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:4103
-  #     - CORE_PEER_GOSSIP_BOOTSTRAP=peer2.org4.example.com:4003
-  #     - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer2.org4.example.com:4003
-  #     - CORE_PEER_LOCALMSPID=Org4MSP
-  #     - CORE_OPERATIONS_LISTENADDRESS=peer2.org4.example.com:4013
-  #   volumes:
-  #     - ../organizations/peerOrganizations/org4.example.com/peers/peer2.org4.example.com/msp:/etc/hyperledger/fabric/msp
-  #     - ../organizations/peerOrganizations/org4.example.com/peers/peer2.org4.example.com/tls:/etc/hyperledger/fabric/tls
-  #     - peer2.org4.example.com:/var/hyperledger/production
-  #   ports:
-  #     - 4003:4003
-  #     - 4013:4013
+  peer2.org4.example.com:
+    container_name: peer2.org4.example.com
+    extends:
+      file: docker-service-extend.yaml
+      service: peer-extend
+    environment:
+      # Peer-specific variables for org4
+      - CORE_PEER_ID=peer2.org4.example.com
+      - CORE_PEER_ADDRESS=peer2.org4.example.com:4003
+      - CORE_PEER_LISTENADDRESS=0.0.0.0:4003
+      - CORE_PEER_CHAINCODEADDRESS=peer2.org4.example.com:4103
+      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:4103
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer2.org4.example.com:4003
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer2.org4.example.com:4003
+      - CORE_PEER_LOCALMSPID=Org4MSP
+      - CORE_OPERATIONS_LISTENADDRESS=peer2.org4.example.com:4013
+    volumes:
+      - ../organizations/peerOrganizations/org4.example.com/peers/peer2.org4.example.com/msp:/etc/hyperledger/fabric/msp
+      - ../organizations/peerOrganizations/org4.example.com/peers/peer2.org4.example.com/tls:/etc/hyperledger/fabric/tls
+      - peer2.org4.example.com:/var/hyperledger/production
+    ports:
+      - 4003:4003
+      - 4013:4013
 
-  # peer3.org4.example.com:
-  #   container_name: peer3.org4.example.com
-  #   extends:
-  #     file: docker-service-extend.yaml
-  #     service: peer-extend
-  #   environment:
-  #     # Peer-specific variables for org4
-  #     - CORE_PEER_ID=peer3.org4.example.com
-  #     - CORE_PEER_ADDRESS=peer3.org4.example.com:4004
-  #     - CORE_PEER_LISTENADDRESS=0.0.0.0:4004
-  #     - CORE_PEER_CHAINCODEADDRESS=peer3.org4.example.com:4104
-  #     - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:4104
-  #     - CORE_PEER_GOSSIP_BOOTSTRAP=peer3.org4.example.com:4004
-  #     - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer3.org4.example.com:4004
-  #     - CORE_PEER_LOCALMSPID=Org4MSP
-  #     - CORE_OPERATIONS_LISTENADDRESS=peer3.org4.example.com:4014
-  #   volumes:
-  #     - ../organizations/peerOrganizations/org4.example.com/peers/peer3.org4.example.com/msp:/etc/hyperledger/fabric/msp
-  #     - ../organizations/peerOrganizations/org4.example.com/peers/peer3.org4.example.com/tls:/etc/hyperledger/fabric/tls
-  #     - peer3.org4.example.com:/var/hyperledger/production
-  #   ports:
-  #     - 4004:4004
-  #     - 4014:4014
+  peer3.org4.example.com:
+    container_name: peer3.org4.example.com
+    extends:
+      file: docker-service-extend.yaml
+      service: peer-extend
+    environment:
+      # Peer-specific variables for org4
+      - CORE_PEER_ID=peer3.org4.example.com
+      - CORE_PEER_ADDRESS=peer3.org4.example.com:4004
+      - CORE_PEER_LISTENADDRESS=0.0.0.0:4004
+      - CORE_PEER_CHAINCODEADDRESS=peer3.org4.example.com:4104
+      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:4104
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer3.org4.example.com:4004
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer3.org4.example.com:4004
+      - CORE_PEER_LOCALMSPID=Org4MSP
+      - CORE_OPERATIONS_LISTENADDRESS=peer3.org4.example.com:4014
+    volumes:
+      - ../organizations/peerOrganizations/org4.example.com/peers/peer3.org4.example.com/msp:/etc/hyperledger/fabric/msp
+      - ../organizations/peerOrganizations/org4.example.com/peers/peer3.org4.example.com/tls:/etc/hyperledger/fabric/tls
+      - peer3.org4.example.com:/var/hyperledger/production
+    ports:
+      - 4004:4004
+      - 4014:4014
 
   cli:
     container_name: cli
@@ -465,20 +465,20 @@ services:
       - ../scripts:/opt/gopath/src/github.com/hyperledger/fabric/peer/scripts/
     depends_on:
       - peer0.org1.example.com
-      # - peer1.org1.example.com
-      # - peer2.org1.example.com
-      # - peer3.org1.example.com
+      - peer1.org1.example.com
+      - peer2.org1.example.com
+      - peer3.org1.example.com
       - peer0.org2.example.com
-      # - peer1.org2.example.com
-      # - peer2.org2.example.com
-      # - peer3.org2.example.com
+      - peer1.org2.example.com
+      - peer2.org2.example.com
+      - peer3.org2.example.com
       - peer0.org3.example.com
-      # - peer1.org3.example.com
-      # - peer2.org3.example.com
-      # - peer3.org3.example.com
+      - peer1.org3.example.com
+      - peer2.org3.example.com
+      - peer3.org3.example.com
       - peer0.org4.example.com
-      # - peer1.org4.example.com
-      # - peer2.org4.example.com
-      # - peer3.org4.example.com
+      - peer1.org4.example.com
+      - peer2.org4.example.com
+      - peer3.org4.example.com
     networks:
       - fabric_net

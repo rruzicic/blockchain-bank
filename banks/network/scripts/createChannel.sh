@@ -108,8 +108,6 @@ joinChannel 3
 infoln "Joining org4 peers to the channel..."
 joinChannel 4
 
-
-
 ## Set the anchor peers for each org in the channel
 infoln "Setting anchor peer for org1..."
 setAnchorPeer 1

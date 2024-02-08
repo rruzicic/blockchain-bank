@@ -250,7 +250,7 @@ Application: &ApplicationDefaults
       Rule: "MAJORITY Endorsement"
 
   Capabilities:
-    !!merge <<: *ApplicationCapabilities
+    <<: *ApplicationCapabilities
 ################################################################################
 #
 #   SECTION: Orderer
@@ -352,7 +352,7 @@ Channel: &ChannelDefaults
   # dedicated Capabilities section elsewhere in this file for a full
   # description
   Capabilities:
-    !!merge <<: *ChannelCapabilities
+    <<: *ChannelCapabilities
 
 ################################################################################
 #
@@ -364,14 +364,14 @@ Channel: &ChannelDefaults
 ################################################################################
 Profiles:
   FourOrgsOrdererGenesis:
-    !!merge <<: *ChannelDefaults
+    <<: *ChannelDefaults
     Orderer:
-      !!merge <<: *OrdererDefaults
+      <<: *OrdererDefaults
       Organizations:
         - *Orderer1Org
         - *Orderer2Org
       Capabilities:
-        !!merge <<: *OrdererCapabilities
+        <<: *OrdererCapabilities
     Consortiums:
       SampleConsortium:
         Organizations:
@@ -381,13 +381,13 @@ Profiles:
           - *Org4
   FourOrgsChannel:
     Consortium: SampleConsortium
-    !!merge <<: *ChannelDefaults
+    <<: *ChannelDefaults
     Application:
-      !!merge <<: *ApplicationDefaults
+      <<: *ApplicationDefaults
       Organizations:
         - *Org1
         - *Org2
         - *Org3
         - *Org4
       Capabilities:
-        !!merge <<: *ApplicationCapabilities
+        <<: *ApplicationCapabilities
