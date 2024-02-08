@@ -13,16 +13,9 @@ const { buildCAClient, registerAndEnrollUser, enrollAdmin } = require('./util/CA
 const { buildCCPOrg, buildWallet } = require('./util/AppUtil.js');
 
 const channelName = 'channel1';
-const chaincodeName = 'basic-sample-5';
-const mspOrg1 = 'Org1MSP';
-const mspOrg2 = 'Org2MSP';
-const mspOrg3 = 'Org3MSP';
-const mspOrg4 = 'Org4MSP';
-const walletPath = path.join(__dirname, 'wallet');
-const org1UserId = 'appUser';
-const org2UserId = 'appUser';
-const org3UserId = 'appUser';
-const org4UserId = 'appUser';
+const chaincodeName = 'basic';
+const walletPath = path.join(__dirname, 'wallets');
+const org1UserId = 'appUser002';
 
 function prettyJSONString(inputString) {
 	return JSON.stringify(JSON.parse(inputString), null, 2);
@@ -77,38 +70,6 @@ function prettyJSONString(inputString) {
  */
 async function main() {
 	try {
-		// build an in memory object with the network configuration (also known as a connection profile)
-		const ccpOrg1 = buildCCPOrg(1);
-		const ccpOrg2 = buildCCPOrg(2);
-		const ccpOrg3 = buildCCPOrg(3);
-		const ccpOrg4 = buildCCPOrg(4);
-
-		// build an instance of the fabric ca services client based on
-		// the information in the network configuration
-		const caClient1 = buildCAClient(FabricCAServices, ccpOrg1, 'ca.org1.example.com');
-		const caClient2 = buildCAClient(FabricCAServices, ccpOrg2, 'ca.org2.example.com');
-		const caClient3 = buildCAClient(FabricCAServices, ccpOrg3, 'ca.org3.example.com');
-		const caClient4 = buildCAClient(FabricCAServices, ccpOrg4, 'ca.org4.example.com');
-
-		// setup the wallet to hold the credentials of the application user
-		const wallet1 = await buildWallet(Wallets, path.join(walletPath, 'wallet1'));
-		const wallet2 = await buildWallet(Wallets, path.join(walletPath, 'wallet2'));
-		const wallet3 = await buildWallet(Wallets, path.join(walletPath, 'wallet3'));
-		const wallet4 = await buildWallet(Wallets, path.join(walletPath, 'wallet4'));
-
-		// in a real application this would be done on an administrative flow, and only once
-		await enrollAdmin(caClient1, wallet1, mspOrg1);
-		await enrollAdmin(caClient2, wallet2, mspOrg2);
-		await enrollAdmin(caClient3, wallet3, mspOrg3);
-		await enrollAdmin(caClient4, wallet4, mspOrg4);
-
-		// in a real application this would be done only when a new user was required to be added
-		// and would be part of an administrative flow
-		await registerAndEnrollUser(caClient1, wallet1, mspOrg1, org1UserId, 'org1.department1');
-		await registerAndEnrollUser(caClient2, wallet2, mspOrg2, org2UserId, 'org2.department1');
-		await registerAndEnrollUser(caClient3, wallet3, mspOrg3, org3UserId, 'org3.department1');
-		await registerAndEnrollUser(caClient3, wallet4, mspOrg4, org4UserId, 'org4.department1');
-
 		// Create a new gateway instance for interacting with the fabric network.
 		// In a real application this would be done as the backend server session is setup for
 		// a user that has been verified.
@@ -198,28 +159,96 @@ async function main() {
 	}
 }
 
-function enrollUser() { }
+async function enrollUser(orgId) {
+	const ccpOrg = buildCCPOrg(orgId);
 
-function queryChaincode() { }
+	// build an instance of the fabric ca services client based on
+	// the information in the network configuration
+	const caClient = buildCAClient(FabricCAServices, ccpOrg, 'ca.org' + orgId + '.example.com');
 
-function invokeChaincode() { }
+	// setup the wallet to hold the credentials of the application user
+	const wallet = await buildWallet(Wallets, path.join(walletPath, 'wallet' + orgId));
 
-function consoleApp() {
+	// in a real application this would be done on an administrative flow, and only once
+	await enrollAdmin(caClient, wallet, 'Org' + orgId + 'MSP');
+
+	// in a real application this would be done only when a new user was required to be added
+	// and would be part of an administrative flow
+	await registerAndEnrollUser(caClient, wallet, 'Org' + orgId + 'MSP', org1UserId, 'org' + orgId + '.department1');
+	const gateway = new Gateway();
+
+	try {
+		await gateway.connect(ccpOrg, {
+			wallet,
+			identity: org1UserId,
+			discovery: { enabled: true, asLocalhost: true } // using asLocalhost as this gateway is using a fabric network deployed locally
+		});
+		const network = await gateway.getNetwork(channelName);
+
+		// Get the contract from the network.
+		return network.getContract(chaincodeName);
+	}
+	catch (error) {
+		console.error(`******** FAILED to run the application: ${error}`);
+	}
+}
+
+async function addClient(contract) {
+	// id, firstName, lastName, email
+	const prompt = require("prompt-sync")({ sigint: true });
+	const id = prompt('ID: ');
+	const firstName = prompt('First name: ');
+	const lastName = prompt('Last name: ');
+	const email = prompt('Email: ');
+
+	try {
+		// How about we try a transactions where the executing chaincode throws an error
+		// Notice how the submitTransaction will throw an error containing the error thrown by the chaincode
+		console.log('\n--> Submit Transaction: CreateClient');
+		await contract.submitTransaction('CreateClient', id, firstName, lastName, email);
+		console.log('******** SUCCESS: added client');
+
+
+	} catch (error) {
+		console.log(`*** FAILED with error: \n    ${error}`);
+	}
+}
+
+async function readClient(contract) {
+	const prompt = require("prompt-sync")({ sigint: true });
+	const id = prompt('ID: ');
+	console.log('\n--> Evaluate Transaction: ReadAsset, function returns "asset1" attributes');
+	const result = await contract.evaluateTransaction('ReadClient', id);
+	console.log(`*** Result: ${prettyJSONString(result.toString())}`);
+}
+
+async function initLedger(contract) {
+	console.log('\n--> Submit Transaction: InitLedger, function creates the initial set of assets on the ledger');
+	await contract.submitTransaction('InitLedger');
+	console.log('*** Result: committed');
+}
+
+async function consoleApp() {
+	const prompt = require("prompt-sync")({ sigint: true });
+	console.log("First lets get you signed in!");
+	const orgId = prompt('What organization do you belong? Enter org ID:');
+	const contract = await enrollUser(orgId);
+
 	while (true) {
 		console.log("Choose an option:");
-		console.log("1 - Enroll user");
-		console.log("2 - Query the chaincode");
-		console.log("3 - Invoke the chaincode");
+		console.log("1 - Init ledger");
+		console.log("2 - Add client");
+		console.log("3 - Read client with ID");
+
 		console.log("Press any other key to exit");
 
-		const prompt = require("prompt-sync")({ sigint: true });
 		const option = prompt("> ");
 		if (option == 1) {
-			enrollUser();
+			await initLedger(contract);
 		} else if (option == 2) {
-			queryChaincode();
+			await addClient(contract);
 		} else if (option == 3) {
-			invokeChaincode();
+			await readClient(contract);
 		} else {
 			break;
 		}
@@ -228,7 +257,7 @@ function consoleApp() {
 
 }
 
-main();
-// consoleApp()
+// main();
+consoleApp()
 
 
